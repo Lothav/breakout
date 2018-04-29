@@ -18,5 +18,5 @@ add_executable(
         src/renderer/Vertex.hpp
         src/renderer/Window.hpp
 
-        )
+        src/renderer/Block.cpp src/renderer/Block.hpp)
 target_link_libraries(launcher SDL2 SDL2_image GLESv2)
