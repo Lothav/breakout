@@ -37,7 +37,7 @@ namespace Renderer {
                 "Breakout",
                 SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
                 screen_width, screen_height,
-                SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE | SDL_WINDOW_INPUT_FOCUS
+                SDL_WINDOW_SHOWN | SDL_WINDOW_INPUT_FOCUS
             );
             if (this->window == nullptr) {
                 fprintf(stderr, "Could not create window: %s\n", SDL_GetError());

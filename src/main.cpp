@@ -71,14 +71,12 @@ int main(int argc, char* args[]) {
         while(SDL_PollEvent(&e))
         {
             auto mouseX = e.motion.x;
+
+            velocity = 0;
             if (mouseX > SCREEN_WIDTH/2) {
                 velocity = (mouseX - SCREEN_WIDTH/2.0f) / 1000000.0f;
-                std::cout << velocity << std::endl;
-            } else if (mouseX < SCREEN_WIDTH/2) {
+            } else if (mouseX > 0 && mouseX < SCREEN_WIDTH/2) {
                 velocity = -(SCREEN_WIDTH/2.0f - mouseX) / 1000000.0f;
-                std::cout << velocity << std::endl;
-            } else {
-                velocity = 0;
             }
 
             if(e.type == SDL_QUIT) return false;

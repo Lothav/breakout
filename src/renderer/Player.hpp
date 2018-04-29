@@ -65,14 +65,16 @@ namespace Renderer
 
         void move(float x, float y)
         {
-            for (int i = 0; i < SIZE_VERTICES; i += COORDINATES_BY_VERTEX)
-            {
-                if ((this->vertices[i]+x) <= 800 ) {
+            auto playerXWallRight = this->vertices[0]+x;
+            auto playerXWallLeft  = this->vertices[COORDINATES_BY_VERTEX]+x;
+
+            if (playerXWallRight <= 1.0f  && playerXWallLeft >= -1.f) {
+                for (int i = 0; i < SIZE_VERTICES; i += COORDINATES_BY_VERTEX)
+                {
                     this->vertices[i]+=x;
                 }
             }
         }
-
     };
 }
 
