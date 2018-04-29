@@ -51,7 +51,8 @@ int main(int argc, char* args[]) {
     auto* meshes = new Renderer::Meshes();
 
     auto* player1 = new Renderer::Player(0.0f, 0.0f, 0.08f, 0.16f);
-    auto* block = new Renderer::Block(0.1f, 0.1f, 0.08f, 0.16f, {1, 0});
+    auto* block = new Renderer::Block(0.1f, 0.1f, {14, 14});
+    auto* block2 = new Renderer::Block(0.2f, -0.1f, {12, 12});
 
     auto* SDL_window = window->getWindow();
 
@@ -103,6 +104,7 @@ int main(int argc, char* args[]) {
         meshes->clear();
         meshes->insert(player1->getVertices(), player1->getTotalVertices());
         meshes->insert(block->getVertices(), block->getTotalVertices());
+        meshes->insert(block2->getVertices(), block2->getTotalVertices());
 
         vertex->setBufferData(meshes->getByteSize(), meshes->get());
         // Set screen to black

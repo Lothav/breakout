@@ -12,5 +12,5 @@ GLfloat* Renderer::Block::getVertices()
 
 unsigned int Renderer::Block::getTotalVertices()
 {
-    return SIZE_VERTICES;
+    return BLOCK_SIZE_VERTICES;
 }
