@@ -1,0 +1,3 @@
+/home/luiz0tavio/breakout/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/luiz0tavio/breakout/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/luiz0tavio/breakout/cmake-build-debug/CMakeFiles/launcher.dir
