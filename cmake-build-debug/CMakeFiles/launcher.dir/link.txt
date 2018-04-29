@@ -1,1 +1,0 @@
-/usr/bin/c++  -g  -rdynamic CMakeFiles/launcher.dir/src/main.cpp.o CMakeFiles/launcher.dir/src/memory/Provider.cpp.o CMakeFiles/launcher.dir/src/memory/Pool.cpp.o CMakeFiles/launcher.dir/src/renderer/Shader.cpp.o  -o launcher -lSDL2 -lSDL2_image -lGLESv2 
