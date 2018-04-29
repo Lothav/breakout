@@ -49,7 +49,7 @@ int main(int argc, char* args[]) {
     auto* vertex = new Renderer::Vertex(shader->getShaderProgram());
     auto* meshes = new Renderer::Meshes();
 
-    auto* player1 = new Renderer::Player(0.0f, 0.0f, 0.08f, 0.16f);
+    auto* player1 = new Renderer::Player(0.0f, -0.8f, 0.24f, 0.06f);
 
     std::srand(std::time(nullptr));
     std::array<Renderer::Block *, 33> blocks;
@@ -72,7 +72,6 @@ int main(int argc, char* args[]) {
         {
             auto mouseX = e.motion.x;
 
-            velocity = 0;
             if (mouseX > SCREEN_WIDTH/2) {
                 velocity = (mouseX - SCREEN_WIDTH/2.0f) / 1000000.0f;
             } else if (mouseX > 0 && mouseX < SCREEN_WIDTH/2) {
@@ -80,45 +79,6 @@ int main(int argc, char* args[]) {
             }
 
             if(e.type == SDL_QUIT) return false;
-            if(e.type == SDL_KEYDOWN)
-            {
-
-                switch( e.key.keysym.sym )
-                {
-                    case SDLK_UP:
-                        player1->move(.0f, .10f);
-                        std::cout << "Key Up pressed" << std::endl;
-                        break;
-                    case SDLK_DOWN:
-                        player1->move(.0f, -.10f);
-                        std::cout << "Key Down pressed" << std::endl;
-                        break;
-                    case SDLK_LEFT:
-                        player1->move(-.10f, .0f);
-                        std::cout << "Key Left pressed" << std::endl;
-                        break;
-                    case SDLK_RIGHT:
-                        player1->move(.10f, .0f);
-                        std::cout << "Key Right pressed" << std::endl;
-                        break;
-
-                    case SDLK_w:
-                        texture->translateCamera(shader->getShaderProgram(), glm::vec3(0.0f, 0.1f, 0.0f));
-                        break;
-                    case SDLK_a:
-                        texture->translateCamera(shader->getShaderProgram(), glm::vec3(-0.1f, 0.0f, 0.0f));
-                        break;
-                    case SDLK_s:
-                        texture->translateCamera(shader->getShaderProgram(), glm::vec3(0.0f, -0.1f, 0.0f));
-                        break;
-                    case SDLK_d:
-                        texture->translateCamera(shader->getShaderProgram(), glm::vec3(0.1f, 0.0f, 0.0f));
-                        break;
-
-                    default:
-                        std::cout << "Non-arrow Key pressed" << std::endl;
-                }
-            }
         }
         meshes->clear();
         meshes->insert(player1->getVertices(), player1->getTotalVertices());

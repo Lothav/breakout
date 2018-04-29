@@ -29,7 +29,7 @@ namespace Renderer
 
     public:
 
-        Player(float x, float y, float height, float width) : x(x), y(y), height(height), width(width)
+        Player(float x, float y, float width, float height) : x(x), y(y), height(height), width(width)
         {
             vertices = {
                     // Triangles                                                c ___
