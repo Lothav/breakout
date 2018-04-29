@@ -42,7 +42,6 @@ int main(int argc, char* args[]) {
     shader->beginProgram();
 
     auto* texture = new Renderer::Uniform();
-    //texture->loadTexture("./data/launcher.png");
     texture->loadTexture("./data/breakout-blocks-texture.jpg");
     texture->setUniform(shader->getShaderProgram(), UNIFORM_TYPE_TEXTURE);
     texture->setUniform(shader->getShaderProgram(), UNIFORM_TYPE_MAT4);
@@ -53,9 +52,12 @@ int main(int argc, char* args[]) {
     auto* player1 = new Renderer::Player(0.0f, 0.0f, 0.08f, 0.16f);
 
     std::srand(std::time(nullptr));
-    std::array<Renderer::Block *, 12> blocks;
-    for (int i = 0; i < 12; ++i) {
-        blocks[i] = new Renderer::Block(-.8f + BLOCK_WIDTH * (i % 6), - 0.4f  + BLOCK_HEIGHT * floor(i / 6));
+    std::array<Renderer::Block *, 33> blocks;
+    for (int i = 0; i < 33; ++i) {
+        blocks[i] = new Renderer::Block(
+            -.8f + BLOCK_WIDTH * (i % 11),
+            0.8f - BLOCK_HEIGHT * floor(i / 11)
+        );
     }
 
     auto* SDL_window = window->getWindow();
@@ -108,7 +110,7 @@ int main(int argc, char* args[]) {
         meshes->clear();
         meshes->insert(player1->getVertices(), player1->getTotalVertices());
 
-        for (int i = 0; i < 12; ++i) {
+        for (int i = 0; i < 33; ++i) {
             meshes->insert(blocks[i]->getVertices(), blocks[i]->getTotalVertices());
             blocks[i];
         }
