@@ -28,7 +28,7 @@ int main(int argc, char* args[]) {
         return EXIT_FAILURE;
     }
 
-    if (IMG_Init(IMG_INIT_PNG) == 0) {
+    if (IMG_Init(IMG_INIT_JPG) == 0) {
         std::cerr << "Could not initialize IMG's flags" << std::endl;
         return EXIT_FAILURE;
     }
@@ -42,15 +42,14 @@ int main(int argc, char* args[]) {
 
     auto* texture = new Renderer::Uniform();
     //texture->loadTexture("./data/launcher.png");
-    texture->loadTexture("./data/launcher.png");
+    texture->loadTexture("./data/block.jpg");
     texture->setUniform(shader->getShaderProgram(), UNIFORM_TYPE_TEXTURE);
     texture->setUniform(shader->getShaderProgram(), UNIFORM_TYPE_MAT4);
 
     auto* vertex = new Renderer::Vertex(shader->getShaderProgram());
     auto* meshes = new Renderer::Meshes();
 
-    auto* player1 = new Renderer::Player( 0.5f, 0.0f, 1.0f, 0.5f);
-    auto* player2 = new Renderer::Player(-0.5f, 0.0f, 1.0f, 0.5f);
+    auto* player1 = new Renderer::Player(0.0f, 0.0f, 0.08f, 0.16f);
 
     auto* SDL_window = window->getWindow();
 
@@ -101,7 +100,6 @@ int main(int argc, char* args[]) {
         }
         meshes->clear();
         meshes->insert(player1->getVertices(), player1->getTotalVertices());
-        meshes->insert(player2->getVertices(), player2->getTotalVertices());
 
         vertex->setBufferData(meshes->getByteSize(), meshes->get());
         // Set screen to black

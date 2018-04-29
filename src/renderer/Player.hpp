@@ -33,13 +33,13 @@ namespace Renderer
         {
             vertices = {
                     // Triangles                                                c ___
-                    x + (width/2), y + (height/2), 0.0f, 1.0f, 0.0f, // a        |  /a
-                    x - (width/2), y - (height/2), 0.0f, 0.0f, 1.0f, // b        | /
-                    x - (width/2), y + (height/2), 0.0f, 0.0f, 0.0f, // c       b|/
+                    x + (width/2), y + (height/2), 0.0f, 0.066f, 0.0f,  // a     |  /a
+                    x - (width/2), y - (height/2), 0.0f, 0.0f,   0.05f, // b     | /
+                    x - (width/2), y + (height/2), 0.0f, 0.0f,   0.0f,  // c    b|/
 
-                    x + (width/2), y + (height/2), 0.0f, 1.0f, 0.0f, // d          /|d
-                    x - (width/2), y - (height/2), 0.0f, 0.0f, 1.0f, // e         / |
-                    x + (width/2), y - (height/2), 0.0f, 1.0f, 1.0f, // f       e/__|f
+                    x + (width/2), y + (height/2), 0.0f, 0.066f, 0.0f,  // d       /|d
+                    x - (width/2), y - (height/2), 0.0f, 0.0f, 0.05f,   // e      / |
+                    x + (width/2), y - (height/2), 0.0f, 0.066f, 0.05f, // f    e/__|f
             };
         }
 
