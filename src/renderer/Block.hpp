@@ -19,10 +19,10 @@
 #define BLOCK_TEXTURE_MAX_X 19
 #define BLOCK_TEXTURE_MAX_Y 14
 
-#define TEXTURE_OFFSET_X 0.06666666666f
-#define TEXTURE_OFFSET_Y 0.05f
+#define TEXTURE_UV_OFFSET_X 0.2f
+#define TEXTURE_UV_OFFSET_Y 0.2f
 
-#define BLOCK_WIDTH 0.16f
+#define BLOCK_WIDTH  0.16f
 #define BLOCK_HEIGHT 0.1f
 
 namespace Renderer
@@ -48,23 +48,23 @@ namespace Renderer
                 Memory::Allocator<std::pair<const char, std::array<GLfloat, 2>> >
             > uv;
 
-            uv['a'] = {TEXTURE_OFFSET_X + texture_index_[0]*TEXTURE_OFFSET_X, texture_index_[0]*TEXTURE_OFFSET_Y};
-            uv['b'] = {texture_index_[0]*TEXTURE_OFFSET_X, TEXTURE_OFFSET_Y + texture_index_[0]*TEXTURE_OFFSET_Y};
-            uv['c'] = {texture_index_[0]*TEXTURE_OFFSET_X, texture_index_[0]*TEXTURE_OFFSET_Y};
+            uv['a'] = {TEXTURE_UV_OFFSET_X + texture_index_[0]*TEXTURE_UV_OFFSET_X, texture_index_[0]*TEXTURE_UV_OFFSET_Y};
+            uv['b'] = {texture_index_[0]*TEXTURE_UV_OFFSET_X, TEXTURE_UV_OFFSET_Y + texture_index_[0]*TEXTURE_UV_OFFSET_Y};
+            uv['c'] = {texture_index_[0]*TEXTURE_UV_OFFSET_X, texture_index_[0]*TEXTURE_UV_OFFSET_Y};
 
-            uv['d'] = {TEXTURE_OFFSET_X + texture_index_[0]*TEXTURE_OFFSET_X, texture_index_[0]*TEXTURE_OFFSET_Y};
-            uv['e'] = {texture_index_[0]*TEXTURE_OFFSET_X, TEXTURE_OFFSET_Y + texture_index_[0]*TEXTURE_OFFSET_Y};
-            uv['f'] = {TEXTURE_OFFSET_X + texture_index_[0]*TEXTURE_OFFSET_X, TEXTURE_OFFSET_Y + texture_index_[0]*TEXTURE_OFFSET_Y};
+            uv['d'] = {TEXTURE_UV_OFFSET_X + texture_index_[0]*TEXTURE_UV_OFFSET_X, texture_index_[0]*TEXTURE_UV_OFFSET_Y};
+            uv['e'] = {texture_index_[0]*TEXTURE_UV_OFFSET_X, TEXTURE_UV_OFFSET_Y + texture_index_[0]*TEXTURE_UV_OFFSET_Y};
+            uv['f'] = {TEXTURE_UV_OFFSET_X + texture_index_[0]*TEXTURE_UV_OFFSET_X, TEXTURE_UV_OFFSET_Y + texture_index_[0]*TEXTURE_UV_OFFSET_Y};
 
             vertices_ = {
-                    // Triangles                                                                      c ___
-                    x_ + (BLOCK_WIDTH/2), y_ + (BLOCK_HEIGHT/2), 0.0f, uv['a'][0], uv['a'][1], // a    |  /a
-                    x_ - (BLOCK_WIDTH/2), y_ - (BLOCK_HEIGHT/2), 0.0f, uv['b'][0], uv['b'][1], // b    | /
-                    x_ - (BLOCK_WIDTH/2), y_ + (BLOCK_HEIGHT/2), 0.0f, uv['c'][0], uv['c'][1], // c   b|/
+                // Triangles                                                                      c ___
+                x_ + (BLOCK_WIDTH/2), y_ + (BLOCK_HEIGHT/2), 0.0f, uv['a'][0], uv['a'][1], // a    |  /a
+                x_ - (BLOCK_WIDTH/2), y_ - (BLOCK_HEIGHT/2), 0.0f, uv['b'][0], uv['b'][1], // b    | /
+                x_ - (BLOCK_WIDTH/2), y_ + (BLOCK_HEIGHT/2), 0.0f, uv['c'][0], uv['c'][1], // c   b|/
 
-                    x_ + (BLOCK_WIDTH/2), y_ + (BLOCK_HEIGHT/2), 0.0f, uv['d'][0], uv['d'][1], // d      /|d
-                    x_ - (BLOCK_WIDTH/2), y_ - (BLOCK_HEIGHT/2), 0.0f, uv['e'][0], uv['e'][1], // e     / |
-                    x_ + (BLOCK_WIDTH/2), y_ - (BLOCK_HEIGHT/2), 0.0f, uv['f'][0], uv['f'][1], // f   e/__|f
+                x_ + (BLOCK_WIDTH/2), y_ + (BLOCK_HEIGHT/2), 0.0f, uv['d'][0], uv['d'][1], // d      /|d
+                x_ - (BLOCK_WIDTH/2), y_ - (BLOCK_HEIGHT/2), 0.0f, uv['e'][0], uv['e'][1], // e     / |
+                x_ + (BLOCK_WIDTH/2), y_ - (BLOCK_HEIGHT/2), 0.0f, uv['f'][0], uv['f'][1], // f   e/__|f
             };
         }
 

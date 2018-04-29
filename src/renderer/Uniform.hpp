@@ -58,9 +58,8 @@ namespace Renderer
 
             glGenTextures(1, &this->data[ UNIFORM_TYPE_TEXTURE ].id);
             glBindTexture(GL_TEXTURE_2D, this->data[ UNIFORM_TYPE_TEXTURE ].id);
-            glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, surf->w, surf->h);
-
-            glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, surf->w, surf->h, GL_RGB, GL_UNSIGNED_BYTE, surf->pixels);
+            glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGB8, surf->w, surf->h);
+            glTexSubImage2D(GL_TEXTURE_2D, 0, 0 ,0, surf->w, surf->h, GL_RGB, GL_UNSIGNED_BYTE, surf->pixels);
 
             free(surf);
 
@@ -69,12 +68,13 @@ namespace Renderer
                 std::cerr << "OpenGL error glTexImage2D. Error code: " << std::to_string(error_code) << std::endl;
             }
 
+            glGenerateMipmap(GL_TEXTURE_2D);
+
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 
-            glGenerateMipmap(GL_TEXTURE_2D);
         }
 
         void setUniform(GLuint shader_program, UniformType type)

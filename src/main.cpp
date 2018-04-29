@@ -43,7 +43,7 @@ int main(int argc, char* args[]) {
 
     auto* texture = new Renderer::Uniform();
     //texture->loadTexture("./data/launcher.png");
-    texture->loadTexture("./data/block.jpg");
+    texture->loadTexture("./data/breakout-blocks-texture.jpg");
     texture->setUniform(shader->getShaderProgram(), UNIFORM_TYPE_TEXTURE);
     texture->setUniform(shader->getShaderProgram(), UNIFORM_TYPE_MAT4);
 
@@ -51,8 +51,9 @@ int main(int argc, char* args[]) {
     auto* meshes = new Renderer::Meshes();
 
     auto* player1 = new Renderer::Player(0.0f, 0.0f, 0.08f, 0.16f);
-    auto* block = new Renderer::Block(0.1f, 0.1f, {14, 14});
-    auto* block2 = new Renderer::Block(0.2f, -0.1f, {12, 12});
+
+    auto* block  = new Renderer::Block(0.1f, 0.1f, {0, 0});
+    auto* block2 = new Renderer::Block(0.2f, -0.1f, {3, 4});
 
     auto* SDL_window = window->getWindow();
 
