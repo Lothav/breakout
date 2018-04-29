@@ -6,6 +6,7 @@
 #include "renderer/Uniform.hpp"
 #include "renderer/Player.hpp"
 #include "renderer/Meshes.hpp"
+#include "renderer/Block.hpp"
 
 /* This binary should check for updates and update the data files, the client and itself for non-console platforms (If internet connection)
  * Update server should be just an SFTP or something, can have the key inside the source code.
@@ -50,6 +51,7 @@ int main(int argc, char* args[]) {
     auto* meshes = new Renderer::Meshes();
 
     auto* player1 = new Renderer::Player(0.0f, 0.0f, 0.08f, 0.16f);
+    auto* block = new Renderer::Block(0.1f, 0.1f, 0.08f, 0.16f, {1, 0});
 
     auto* SDL_window = window->getWindow();
 
@@ -100,6 +102,7 @@ int main(int argc, char* args[]) {
         }
         meshes->clear();
         meshes->insert(player1->getVertices(), player1->getTotalVertices());
+        meshes->insert(block->getVertices(), block->getTotalVertices());
 
         vertex->setBufferData(meshes->getByteSize(), meshes->get());
         // Set screen to black

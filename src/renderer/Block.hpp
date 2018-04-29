@@ -35,7 +35,10 @@ namespace Renderer
         Block(float x, float y, float height, float width, std::array<int, 2> texture_index)
                 : x(x), y(y), height(height), width(width), texture_index_(texture_index)
         {
-            std::map<char, std::array<GLfloat, 2>, Memory::Allocator> uv;
+            std::map<
+                char,
+                std::array<GLfloat, 2>
+            > uv;
 
             uv['a'] = {0.066f + texture_index_[0]*0.066f, texture_index_[0]*0.05f};
             uv['b'] = {texture_index_[0]*0.066f, 0.05f + texture_index_[0]*0.05f};
