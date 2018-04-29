@@ -10,7 +10,6 @@
 #include <cstring>
 #include <array>
 
-
 namespace Memory
 {
     enum PoolType {
