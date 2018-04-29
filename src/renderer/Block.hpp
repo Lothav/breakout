@@ -37,7 +37,9 @@ namespace Renderer
         {
             std::map<
                 char,
-                std::array<GLfloat, 2>
+                std::array<GLfloat, 2>,
+                std::less<char>,
+                Memory::Allocator<std::pair<const char, std::array<GLfloat, 2>> >
             > uv;
 
             uv['a'] = {0.066f + texture_index_[0]*0.066f, texture_index_[0]*0.05f};

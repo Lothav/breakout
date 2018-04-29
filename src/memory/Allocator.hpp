@@ -18,6 +18,8 @@ namespace Memory
 
         typedef T value_type;
 
+    public:
+
         Allocator() = default;
         template <class U> constexpr
         Allocator(const Allocator<U>&) noexcept {}
@@ -29,7 +31,7 @@ namespace Memory
                 std::cerr << "ERR: Size: " << std::to_string(size) << "bytes exceeds max." << std::endl;
             }
 
-            auto* mem = Provider::getMemory(PoolType::POOL_TYPE_GENERIC, size);
+            auto* mem = Provider::getMemory(PoolType::POOL_TYPE_GENERIC, size*sizeof(T));
             if ( T* p = static_cast<T*>(mem) ) return p;
             if ( T* p = (T *) malloc(size) ) return p;
 
