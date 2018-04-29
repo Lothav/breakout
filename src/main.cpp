@@ -7,6 +7,7 @@
 #include "renderer/Player.hpp"
 #include "renderer/Meshes.hpp"
 #include "renderer/Block.hpp"
+#include "renderer/Ball.hpp"
 
 /* This binary should check for updates and update the data files, the client and itself for non-console platforms (If internet connection)
  * Update server should be just an SFTP or something, can have the key inside the source code.
@@ -50,6 +51,7 @@ int main(int argc, char* args[]) {
     auto* meshes = new Renderer::Meshes();
 
     auto* player1 = new Renderer::Player(0.0f, -0.8f, 0.24f, 0.06f);
+    auto* ball = new Renderer::Ball(0.0f, 0.0f, 0.24f);
 
     std::srand(std::time(nullptr));
     std::array<Renderer::Block *, 33> blocks;
@@ -82,7 +84,7 @@ int main(int argc, char* args[]) {
         }
         meshes->clear();
         meshes->insert(player1->getVertices(), player1->getTotalVertices());
-
+        meshes->insert(ball->getVertices(), ball->getTotalVertices());
         for (int i = 0; i < 33; ++i) {
             meshes->insert(blocks[i]->getVertices(), blocks[i]->getTotalVertices());
             blocks[i];
