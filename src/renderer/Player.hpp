@@ -67,8 +67,9 @@ namespace Renderer
         {
             for (int i = 0; i < SIZE_VERTICES; i += COORDINATES_BY_VERTEX)
             {
-                this->vertices[i]   += x;
-                this->vertices[i+1] += y;
+                if ((this->vertices[i]+x) <= 800 ) {
+                    this->vertices[i]+=x;
+                }
             }
         }
 

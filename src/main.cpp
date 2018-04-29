@@ -62,14 +62,29 @@ int main(int argc, char* args[]) {
 
     auto* SDL_window = window->getWindow();
 
+    float velocity = 0;
     auto loop =  [&] () -> bool
     {
+        player1->move(velocity, .0f);
+
         SDL_Event e;
         while(SDL_PollEvent(&e))
         {
+            auto mouseX = e.motion.x;
+            if (mouseX > SCREEN_WIDTH/2) {
+                velocity = (mouseX - SCREEN_WIDTH/2.0f) / 1000000.0f;
+                std::cout << velocity << std::endl;
+            } else if (mouseX < SCREEN_WIDTH/2) {
+                velocity = -(SCREEN_WIDTH/2.0f - mouseX) / 1000000.0f;
+                std::cout << velocity << std::endl;
+            } else {
+                velocity = 0;
+            }
+
             if(e.type == SDL_QUIT) return false;
             if(e.type == SDL_KEYDOWN)
             {
+
                 switch( e.key.keysym.sym )
                 {
                     case SDLK_UP:
