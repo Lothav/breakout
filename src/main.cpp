@@ -52,8 +52,11 @@ int main(int argc, char* args[]) {
 
     auto* player1 = new Renderer::Player(0.0f, 0.0f, 0.08f, 0.16f);
 
-    auto* block  = new Renderer::Block(0.1f, 0.1f, {0, 0});
-    auto* block2 = new Renderer::Block(0.2f, -0.1f, {3, 4});
+    std::srand(std::time(nullptr));
+    std::array<Renderer::Block *, 12> blocks;
+    for (int i = 0; i < 12; ++i) {
+        blocks[i] = new Renderer::Block(-.8f + BLOCK_WIDTH * (i % 6), - 0.4f  + BLOCK_HEIGHT * floor(i / 6));
+    }
 
     auto* SDL_window = window->getWindow();
 
@@ -104,9 +107,11 @@ int main(int argc, char* args[]) {
         }
         meshes->clear();
         meshes->insert(player1->getVertices(), player1->getTotalVertices());
-        meshes->insert(block->getVertices(), block->getTotalVertices());
-        meshes->insert(block2->getVertices(), block2->getTotalVertices());
 
+        for (int i = 0; i < 12; ++i) {
+            meshes->insert(blocks[i]->getVertices(), blocks[i]->getTotalVertices());
+            blocks[i];
+        }
         vertex->setBufferData(meshes->getByteSize(), meshes->get());
         // Set screen to black
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);

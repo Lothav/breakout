@@ -7,6 +7,7 @@
 
 #include <array>
 #include <GLES3/gl3.h>
+#include <ctime>
 #include "../memory/Pool.hpp"
 #include "../memory/Provider.hpp"
 #include "../memory/Allocator.hpp"
@@ -16,8 +17,8 @@
 
 #define BLOCK_SIZE_VERTICES BLOCK_VERTICES*BLOCK_COORDINATES_BY_VERTEX
 
-#define BLOCK_TEXTURE_MAX_X 19
-#define BLOCK_TEXTURE_MAX_Y 14
+#define BLOCK_TEXTURE_MAX_X 5
+#define BLOCK_TEXTURE_MAX_Y 5
 
 #define TEXTURE_UV_OFFSET_X 0.2f
 #define TEXTURE_UV_OFFSET_Y 0.2f
@@ -39,8 +40,9 @@ namespace Renderer
 
     public:
 
-        Block(float x, float y, std::array<int, 2> texture_index) : x_(x), y_(y), texture_index_(texture_index)
+        Block(float x, float y) : x_(x), y_(y)
         {
+            texture_index_[0] = std::rand() % BLOCK_TEXTURE_MAX_X;
             std::map<
                 char,
                 std::array<GLfloat, 2>,
@@ -48,13 +50,16 @@ namespace Renderer
                 Memory::Allocator<std::pair<const char, std::array<GLfloat, 2>> >
             > uv;
 
-            uv['a'] = {TEXTURE_UV_OFFSET_X + texture_index_[0]*TEXTURE_UV_OFFSET_X, texture_index_[0]*TEXTURE_UV_OFFSET_Y};
-            uv['b'] = {texture_index_[0]*TEXTURE_UV_OFFSET_X, TEXTURE_UV_OFFSET_Y + texture_index_[0]*TEXTURE_UV_OFFSET_Y};
-            uv['c'] = {texture_index_[0]*TEXTURE_UV_OFFSET_X, texture_index_[0]*TEXTURE_UV_OFFSET_Y};
+            texture_index_[0] = std::rand() % BLOCK_TEXTURE_MAX_X;
+            texture_index_[1] = std::rand() % BLOCK_TEXTURE_MAX_Y;
 
-            uv['d'] = {TEXTURE_UV_OFFSET_X + texture_index_[0]*TEXTURE_UV_OFFSET_X, texture_index_[0]*TEXTURE_UV_OFFSET_Y};
-            uv['e'] = {texture_index_[0]*TEXTURE_UV_OFFSET_X, TEXTURE_UV_OFFSET_Y + texture_index_[0]*TEXTURE_UV_OFFSET_Y};
-            uv['f'] = {TEXTURE_UV_OFFSET_X + texture_index_[0]*TEXTURE_UV_OFFSET_X, TEXTURE_UV_OFFSET_Y + texture_index_[0]*TEXTURE_UV_OFFSET_Y};
+            uv['a'] = {TEXTURE_UV_OFFSET_X + texture_index_[0]*TEXTURE_UV_OFFSET_X, texture_index_[1]*TEXTURE_UV_OFFSET_Y};
+            uv['b'] = {texture_index_[0]*TEXTURE_UV_OFFSET_X, TEXTURE_UV_OFFSET_Y + texture_index_[1]*TEXTURE_UV_OFFSET_Y};
+            uv['c'] = {texture_index_[0]*TEXTURE_UV_OFFSET_X, texture_index_[1]*TEXTURE_UV_OFFSET_Y};
+
+            uv['d'] = {TEXTURE_UV_OFFSET_X + texture_index_[0]*TEXTURE_UV_OFFSET_X, texture_index_[1]*TEXTURE_UV_OFFSET_Y};
+            uv['e'] = {texture_index_[0]*TEXTURE_UV_OFFSET_X, TEXTURE_UV_OFFSET_Y + texture_index_[1]*TEXTURE_UV_OFFSET_Y};
+            uv['f'] = {TEXTURE_UV_OFFSET_X + texture_index_[0]*TEXTURE_UV_OFFSET_X, TEXTURE_UV_OFFSET_Y + texture_index_[1]*TEXTURE_UV_OFFSET_Y};
 
             vertices_ = {
                 // Triangles                                                                      c ___
