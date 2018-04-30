@@ -53,12 +53,12 @@ int main(int argc, char* args[]) {
     auto* player1 = new Renderer::Player(0.0f, -0.8f, 0.24f, 0.06f);
     auto* ball = new Renderer::Ball(0.0f, 0.0f, 0.24f);
 
-    std::srand(std::time(nullptr));
+    std::srand(static_cast<unsigned int>(std::time(nullptr)));
     std::array<Renderer::Block *, 33> blocks;
     for (int i = 0; i < 33; ++i) {
         blocks[i] = new Renderer::Block(
             -.8f + BLOCK_WIDTH * (i % 11),
-            0.8f - BLOCK_HEIGHT * floor(i / 11)
+            0.8f - BLOCK_HEIGHT * static_cast<float>(floor(i / 11))
         );
     }
 
@@ -82,6 +82,9 @@ int main(int argc, char* args[]) {
 
             if(e.type == SDL_QUIT) return false;
         }
+
+        ball->moveBall();
+
         meshes->clear();
         meshes->insert(player1->getVertices(), player1->getTotalVertices());
         meshes->insert(ball->getVertices(), ball->getTotalVertices());

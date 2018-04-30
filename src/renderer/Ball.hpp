@@ -25,12 +25,15 @@ namespace Renderer
         float x_;
         float y_;
         float speed_;
+        std::array<int, 2> direction_;
 
         std::array<GLfloat, BALL_SIZE_VERTICES> vertices_;
 
     public:
         Ball(float x, float y, float speed): x_(x), y_(y), speed_(speed)
         {
+            speed_ = 0.0001f;
+            direction_ = {1, 1};
             vertices_ = {
                     // Triangles                                                      c ___
                     x + (BALL_WIDTH/2), y + (BALL_HEIGHT/2), 0.0f, 1.0f, 0.0f, // a    |  /a
@@ -43,8 +46,17 @@ namespace Renderer
             };
         }
 
-        void moveBall() {
-
+        void moveBall()
+        {
+            int i;
+            for (i = 0; i < vertices_.size(); i++) {
+                if (i % COORDINATES_BY_VERTEX == 0) {
+                    vertices_[i] += speed_ * direction_[0];
+                } else
+                if (i % COORDINATES_BY_VERTEX == 1) {
+                    vertices_[i] += speed_ * direction_[1];
+                }
+            }
         }
 
         unsigned int getTotalVertices()
