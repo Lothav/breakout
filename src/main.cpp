@@ -85,11 +85,10 @@ int main(int argc, char* argv[]) {
         auto *SDL_window = window->getWindow();
 
         float velocity = 0;
+        bool pause = false;
         auto loop = [&]() -> bool {
 
             auto start = SDL_GetTicks();
-
-            player1->move(velocity, .0f);
 
             SDL_Event e;
             while (SDL_PollEvent(&e)) {
@@ -104,7 +103,19 @@ int main(int argc, char* argv[]) {
                 if (e.type == SDL_QUIT || e.key.keysym.sym == SDLK_q) {
                     return false;
                 }
+
+                if(e.type == SDL_MOUSEBUTTONDOWN) {
+                    if(e.button.button == SDL_BUTTON_LEFT){
+                        pause = !pause;
+                    }
+                }
+
             }
+            if (pause) {
+                return true;
+            }
+
+            player1->move(velocity, .0f);
 
             auto player_vertices = player1->getArrayVertices();
             ball->checkWallCollision();
