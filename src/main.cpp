@@ -1,4 +1,5 @@
 #include <functional>
+#include <memory>
 
 #include "renderer/Window.hpp"
 #include "renderer/Shader.hpp"
@@ -21,6 +22,8 @@
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 600
 
+#define TOTAL_BLOCKS 33
+
 int main(int argc, char* args[]) {
 
     Memory::Provider::initPools();
@@ -35,32 +38,40 @@ int main(int argc, char* args[]) {
         return EXIT_FAILURE;
     }
 
-    auto* window = new Renderer::Window(SCREEN_WIDTH, SCREEN_HEIGHT);
+    auto window = std::make_unique<Renderer::Window>(SCREEN_WIDTH, SCREEN_HEIGHT);
 
-    auto* shader = new Renderer::Shader();
+    auto shader = std::make_unique<Renderer::Shader>() ;
     shader->createGraphicShader(GL_VERTEX_SHADER, "default.vert");
     shader->createGraphicShader(GL_FRAGMENT_SHADER, "default.frag");
     shader->beginProgram();
 
-    auto* texture = new Renderer::Uniform();
+    auto texture = std::make_unique<Renderer::Uniform>();
     texture->loadTexture("./data/breakout-blocks-texture.jpg");
     texture->setUniform(shader->getShaderProgram(), UNIFORM_TYPE_TEXTURE);
     texture->setUniform(shader->getShaderProgram(), UNIFORM_TYPE_MAT4);
 
-    auto* vertex = new Renderer::Vertex(shader->getShaderProgram());
-    auto* meshes = new Renderer::Meshes();
+    auto vertex = std::make_unique<Renderer::Vertex>(shader->getShaderProgram());
 
-    auto* player1 = new Entity::Paddle(0.0f, -0.8f, 0.24f, 0.06f);
-    auto* ball = new Entity::Ball(0.0f, 0.0f, 0.24f);
+    auto player1 = std::make_unique<Entity::Paddle>(0.0f, -0.8f, 0.24f, 0.06f);
+    auto ball = std::make_unique<Entity::Ball>(0.0f, 0.0f, 0.24f);
+
+    auto meshes = std::make_unique<Renderer::Meshes>();
 
     std::srand(static_cast<unsigned int>(std::time(nullptr)));
-    std::array<Entity::Block *, 33> blocks;
-    for (int i = 0; i < 33; ++i) {
-        blocks[i] = new Entity::Block(
+    std::unique_ptr<Entity::Block> blocks[TOTAL_BLOCKS];
+
+    int i = -1;
+    std::generate(
+        std::begin(blocks),
+        std::end(blocks),
+        [&i]() {
+            i++;
+            return std::make_unique<Entity::Block>(
                 -.8f + BLOCK_WIDTH * (i % 11),
                 0.8f - BLOCK_HEIGHT * static_cast<float>(floor(i / 11))
-        );
-    }
+            );
+        }
+    );
 
     auto* SDL_window = window->getWindow();
 
@@ -80,7 +91,9 @@ int main(int argc, char* args[]) {
                 velocity = -(SCREEN_WIDTH/2.0f - mouseX) / 1000000.0f;
             }
 
-            if(e.type == SDL_QUIT) return false;
+            if(e.type == SDL_QUIT) {
+                return false;
+            }
         }
 
         auto player_vertices = player1->getArrayVertices();
@@ -90,12 +103,12 @@ int main(int argc, char* args[]) {
         ball->moveBall();
 
         meshes->clear();
-        for (auto block : blocks) {
-            if (block->isAlive()) {
-                if (ball->checkObjectCollision(block->getArrayVertices())) {
-                    block->changeVisibility();
+        for (i = 0; i <TOTAL_BLOCKS; ++i) {
+            if (blocks[i]->isAlive()) {
+                if (ball->checkObjectCollision(blocks[i]->getArrayVertices())) {
+                    blocks[i]->changeVisibility();
                 }
-                meshes->insert(block->getVertices(), block->getTotalVertices());
+                meshes->insert(blocks[i]->getVertices(), blocks[i]->getTotalVertices());
             }
         }
         meshes->insert(player1->getVertices(), player1->getTotalVertices());

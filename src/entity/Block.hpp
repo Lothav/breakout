@@ -80,10 +80,7 @@ namespace Entity
             return Memory::Provider::getMemory(Memory::PoolType::POOL_TYPE_GENERIC, size);
         }
 
-        void  operator delete (void* ptr, std::size_t)
-        {
-            std::cerr << "call delete for non-delete heap memory!" << std::endl;
-        }
+        void  operator delete (void* ptr, std::size_t) {}
 
         std::array<GLfloat, BLOCK_SIZE_VERTICES> getArrayVertices()
         {

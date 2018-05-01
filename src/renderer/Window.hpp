@@ -17,16 +17,6 @@ namespace Renderer {
 
     public:
 
-        void* operator new (std::size_t size)
-        {
-            return Memory::Provider::getMemory(Memory::PoolType::POOL_TYPE_GENERIC, size);
-        }
-
-        void  operator delete (void* ptr, std::size_t)
-        {
-            std::cerr << "call delete for non-delete heap memory!" << std::endl;
-        }
-
         Window(const int screen_width, const int screen_height) : window(nullptr), renderer(nullptr)
         {
             if (SDL_Init(SDL_INIT_VIDEO) < 0) {
@@ -59,6 +49,13 @@ namespace Renderer {
             SDL_DestroyWindow(this->window);
             SDL_Quit();
         }
+
+        void* operator new (std::size_t size)
+        {
+            return Memory::Provider::getMemory(Memory::PoolType::POOL_TYPE_GENERIC, size);
+        }
+
+        void  operator delete (void* ptr, std::size_t) {}
 
         SDL_Window* getWindow();
 

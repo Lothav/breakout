@@ -8,6 +8,7 @@
 #include <GLES3/gl3.h>
 #include <array>
 #include <iostream>
+#include "../memory/Provider.hpp"
 
 #define COORDINATES_BY_VERTEX 5   // 5 coords each (x, y, z, u, v)
 #define BALL_VERTICES 6         // 6 points (two triangles
@@ -44,6 +45,13 @@ namespace Entity
                     x + (BALL_WIDTH / 2), y - (BALL_HEIGHT / 2), 0.0f, 1.0f, 1.0f, // f    e/__|f
             };
         }
+
+        void * operator new (std::size_t size)
+        {
+            return Memory::Provider::getMemory(Memory::PoolType::POOL_TYPE_GENERIC, size);
+        }
+
+        void  operator delete (void* ptr, std::size_t) {}
 
         void moveBall();
 
