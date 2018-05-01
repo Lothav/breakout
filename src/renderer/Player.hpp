@@ -8,6 +8,7 @@
 #include <GLES3/gl3.h>
 #include <algorithm>
 #include <array>
+#include "../memory/Provider.hpp"
 
 #define COORDINATES_BY_VERTEX 5   // 5 coords each (x, y, z, u, v)
 #define PLAYER_VERTICES 6         // 6 points (two triangles
@@ -53,33 +54,13 @@ namespace Renderer
             std::cerr << "call delete for non-delete heap memory!" << std::endl;
         }
 
-        std::array<GLfloat, SIZE_VERTICES> getArrayVertices()
-        {
-            return this->vertices;
-        };
+        std::array<GLfloat, SIZE_VERTICES> getArrayVertices();
 
-        GLfloat* getVertices()
-        {
-            return this->vertices.data();
-        }
+        GLfloat* getVertices();
 
-        unsigned int getTotalVertices()
-        {
-            return SIZE_VERTICES;
-        }
+        unsigned int getTotalVertices();
 
-        void move(float x, float y)
-        {
-            auto playerXWallRight = this->vertices[0]+x;
-            auto playerXWallLeft  = this->vertices[COORDINATES_BY_VERTEX]+x;
-
-            if (playerXWallRight <= 1.0f  && playerXWallLeft >= -1.f) {
-                for (int i = 0; i < SIZE_VERTICES; i += COORDINATES_BY_VERTEX)
-                {
-                    this->vertices[i]+=x;
-                }
-            }
-        }
+        void move(float x, float y);
     };
 }
 
