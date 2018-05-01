@@ -7,6 +7,7 @@
 #include <vector>
 #include "../memory/Pool.hpp"
 #include "../memory/Provider.hpp"
+#include "../memory/Allocator.hpp"
 
 namespace Renderer {
 
@@ -15,7 +16,7 @@ namespace Renderer {
 
     private:
         GLuint shaderProgram;
-        std::vector<GLuint> shaders;
+        std::vector<GLuint, Memory::Allocator<GLuint>> shaders;
 
     public:
 

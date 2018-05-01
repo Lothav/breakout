@@ -55,7 +55,7 @@ namespace Renderer {
             return Memory::Provider::getMemory(Memory::PoolType::POOL_TYPE_GENERIC, size);
         }
 
-        void  operator delete (void* ptr, std::size_t) {}
+        void operator delete (void* ptr, std::size_t) {}
 
         SDL_Window* getWindow();
 

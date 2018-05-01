@@ -38,101 +38,101 @@ int main(int argc, char* args[]) {
         return EXIT_FAILURE;
     }
 
-    auto window = std::make_unique<Renderer::Window>(SCREEN_WIDTH, SCREEN_HEIGHT);
-
-    auto shader = std::make_unique<Renderer::Shader>() ;
-    shader->createGraphicShader(GL_VERTEX_SHADER, "default.vert");
-    shader->createGraphicShader(GL_FRAGMENT_SHADER, "default.frag");
-    shader->beginProgram();
-
-    auto texture = std::make_unique<Renderer::Uniform>();
-    texture->loadTexture("./data/breakout-blocks-texture.jpg");
-    texture->setUniform(shader->getShaderProgram(), UNIFORM_TYPE_TEXTURE);
-    texture->setUniform(shader->getShaderProgram(), UNIFORM_TYPE_MAT4);
-
-    auto vertex = std::make_unique<Renderer::Vertex>(shader->getShaderProgram());
-
-    auto player1 = std::make_unique<Entity::Paddle>(0.0f, -0.8f, 0.24f, 0.06f);
-    auto ball = std::make_unique<Entity::Ball>(0.0f, 0.0f, 0.24f);
-
-    auto meshes = std::make_unique<Renderer::Meshes>();
-
-    std::srand(static_cast<unsigned int>(std::time(nullptr)));
-    std::unique_ptr<Entity::Block> blocks[TOTAL_BLOCKS];
-
-    int i = -1;
-    std::generate(
-        std::begin(blocks),
-        std::end(blocks),
-        [&i]() {
-            i++;
-            return std::make_unique<Entity::Block>(
-                -.8f + BLOCK_WIDTH * (i % 11),
-                0.8f - BLOCK_HEIGHT * static_cast<float>(floor(i / 11))
-            );
-        }
-    );
-
-    auto* SDL_window = window->getWindow();
-
-    float velocity = 0;
-    auto loop =  [&] () -> bool
     {
-        player1->move(velocity, .0f);
+        auto window = std::make_unique<Renderer::Window>(SCREEN_WIDTH, SCREEN_HEIGHT);
 
-        SDL_Event e;
-        while(SDL_PollEvent(&e))
-        {
-            auto mouseX = e.motion.x;
+        auto shader = std::make_unique<Renderer::Shader>();
+        shader->createGraphicShader(GL_VERTEX_SHADER, "default.vert");
+        shader->createGraphicShader(GL_FRAGMENT_SHADER, "default.frag");
+        shader->beginProgram();
 
-            if (mouseX > SCREEN_WIDTH/2) {
-                velocity = (mouseX - SCREEN_WIDTH/2.0f) / 1000000.0f;
-            } else if (mouseX > 0 && mouseX < SCREEN_WIDTH/2) {
-                velocity = -(SCREEN_WIDTH/2.0f - mouseX) / 1000000.0f;
-            }
+        auto texture = std::make_unique<Renderer::Uniform>();
+        texture->loadTexture("./data/breakout-blocks-texture.jpg");
+        texture->setUniform(shader->getShaderProgram(), UNIFORM_TYPE_TEXTURE);
+        texture->setUniform(shader->getShaderProgram(), UNIFORM_TYPE_MAT4);
 
-            if(e.type == SDL_QUIT) {
-                return false;
-            }
-        }
+        auto vertex = std::make_unique<Renderer::Vertex>(shader->getShaderProgram());
 
-        auto player_vertices = player1->getArrayVertices();
-        ball->checkWallCollision();
-        ball->checkObjectCollision(player_vertices);
+        auto player1 = std::make_unique<Entity::Paddle>(0.0f, -0.8f, 0.24f, 0.06f);
+        auto ball = std::make_unique<Entity::Ball>(0.0f, 0.0f, 0.24f);
 
-        ball->moveBall();
+        auto meshes = std::make_unique<Renderer::Meshes>();
 
-        meshes->clear();
-        for (i = 0; i <TOTAL_BLOCKS; ++i) {
-            if (blocks[i]->isAlive()) {
-                if (ball->checkObjectCollision(blocks[i]->getArrayVertices())) {
-                    blocks[i]->changeVisibility();
+        std::srand(static_cast<unsigned int>(std::time(nullptr)));
+        std::unique_ptr<Entity::Block> blocks[TOTAL_BLOCKS];
+
+        int i = -1;
+        std::generate(
+                std::begin(blocks),
+                std::end(blocks),
+                [&i]() {
+                    i++;
+                    return std::make_unique<Entity::Block>(
+                            -.8f + BLOCK_WIDTH * (i % 11),
+                            0.8f - BLOCK_HEIGHT * static_cast<float>(floor(i / 11))
+                    );
                 }
-                meshes->insert(blocks[i]->getVertices(), blocks[i]->getTotalVertices());
-            }
-        }
-        meshes->insert(player1->getVertices(), player1->getTotalVertices());
-        meshes->insert(ball->getVertices(), ball->getTotalVertices());
-        vertex->setBufferData(meshes->getByteSize(), meshes->get());
-        // Set screen to black
-        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
+        );
 
-        auto count_meshes = static_cast<GLsizei>(meshes->getSize());
-        glDrawArrays(GL_TRIANGLES, 0, count_meshes);
-        SDL_GL_SwapWindow(SDL_window);
+        auto *SDL_window = window->getWindow();
+
+        float velocity = 0;
+        auto loop = [&]() -> bool {
+            player1->move(velocity, .0f);
+
+            SDL_Event e;
+            while (SDL_PollEvent(&e)) {
+                auto mouseX = e.motion.x;
+
+                if (mouseX > SCREEN_WIDTH / 2) {
+                    velocity = (mouseX - SCREEN_WIDTH / 2.0f) / 1000000.0f;
+                } else if (mouseX > 0 && mouseX < SCREEN_WIDTH / 2) {
+                    velocity = -(SCREEN_WIDTH / 2.0f - mouseX) / 1000000.0f;
+                }
+
+                if (e.type == SDL_QUIT) {
+                    return false;
+                }
+            }
+
+            auto player_vertices = player1->getArrayVertices();
+            ball->checkWallCollision();
+            ball->checkObjectCollision(player_vertices);
+
+            ball->moveBall();
+
+            meshes->clear();
+            for (i = 0; i < TOTAL_BLOCKS; ++i) {
+                if (blocks[i]->isAlive()) {
+                    if (ball->checkObjectCollision(blocks[i]->getArrayVertices())) {
+                        blocks[i]->changeVisibility();
+                    }
+                    meshes->insert(blocks[i]->getVertices(), blocks[i]->getTotalVertices());
+                }
+            }
+            meshes->insert(player1->getVertices(), player1->getTotalVertices());
+            meshes->insert(ball->getVertices(), ball->getTotalVertices());
+            vertex->setBufferData(meshes->getByteSize(), meshes->get());
+            // Set screen to black
+            glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+            glClear(GL_COLOR_BUFFER_BIT);
+
+            auto count_meshes = static_cast<GLsizei>(meshes->getSize());
+            glDrawArrays(GL_TRIANGLES, 0, count_meshes);
+            SDL_GL_SwapWindow(SDL_window);
 #ifdef DEBUG
-        return false;
+            return false;
 #else
-        return true;
+            return true;
 #endif
-    };
+        };
 
 #ifdef __EMSCRIPTEN__
-    emscripten_set_main_loop(loop, 0, true);
+        emscripten_set_main_loop(loop, 0, true);
 #else
-    while(loop());
+        while(loop());
 #endif
+    }
 
     Memory::Provider::destroyPools();
     return EXIT_SUCCESS;

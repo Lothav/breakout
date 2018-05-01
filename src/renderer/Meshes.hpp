@@ -9,6 +9,7 @@
 #include <GLES3/gl3.h>
 #include <iostream>
 #include "../memory/Provider.hpp"
+#include "../memory/Allocator.hpp"
 
 namespace Renderer
 {
@@ -16,19 +17,18 @@ namespace Renderer
     {
     private:
 
-        std::vector<GLfloat> meshes;
+        std::vector<GLfloat, Memory::Allocator<GLfloat>> meshes;
 
     public:
 
         Meshes(): meshes({}) {}
-
 
         void * operator new (std::size_t size)
         {
             return Memory::Provider::getMemory(Memory::PoolType::POOL_TYPE_GENERIC, size);
         }
 
-        void  operator delete (void* ptr, std::size_t) {}
+        void operator delete (void* ptr, std::size_t size) {}
 
         void insert(GLfloat* mesh, unsigned int meshes_size);
 
