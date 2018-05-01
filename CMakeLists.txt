@@ -18,5 +18,5 @@ add_executable(
         src/renderer/Vertex.hpp
         src/renderer/Window.hpp
 
-        src/renderer/Block.cpp src/renderer/Block.hpp src/renderer/Ball.cpp src/renderer/Ball.hpp src/renderer/Meshes.cpp src/renderer/Player.cpp src/renderer/Uniform.cpp)
+        src/renderer/Block.cpp src/renderer/Block.hpp src/renderer/Ball.cpp src/renderer/Ball.hpp src/renderer/Meshes.cpp src/renderer/Player.cpp src/renderer/Uniform.cpp src/renderer/Vertex.cpp)
 target_link_libraries(launcher SDL2 SDL2_image GLESv2)
