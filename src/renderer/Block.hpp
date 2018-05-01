@@ -35,12 +35,14 @@ namespace Renderer
         float x_;
         float y_;
 
+        bool shown_;
+
         std::array<int, 2> texture_index_;
         std::array<GLfloat, BLOCK_SIZE_VERTICES> vertices_;
 
     public:
 
-        Block(float x, float y) : x_(x), y_(y)
+        Block(float x, float y) : x_(x), y_(y), shown_(true)
         {
             texture_index_[0] = std::rand() % BLOCK_TEXTURE_MAX_X;
             std::map<
@@ -86,6 +88,16 @@ namespace Renderer
         std::array<GLfloat, BLOCK_SIZE_VERTICES> getArrayVertices()
         {
             return vertices_;
+        }
+
+        void changeVisibility()
+        {
+            shown_ = false;
+        }
+
+        bool isAlive()
+        {
+            return shown_;
         }
 
         GLfloat* getVertices();

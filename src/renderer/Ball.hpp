@@ -31,7 +31,7 @@ namespace Renderer
 
     public:
         Ball(float x, float y, float speed) : x_(x), y_(y), speed_(speed) {
-            speed_ = 0.0005f;
+            speed_ = 0.00005f;
             direction_ = {1.0f, 1.0f};
             vertices_ = {
                     // Triangles                                                          c ___
@@ -67,7 +67,7 @@ namespace Renderer
             if (ballYBottom <= -0.95f) direction_[1] =  1;
         }
 
-        void checkObjectCollision(std::array<GLfloat, BALL_SIZE_VERTICES> object)
+        bool checkObjectCollision(std::array<GLfloat, BALL_SIZE_VERTICES> object)
         {
             auto objectXRight  = object[0];
             auto objectYTop    = object[1];
@@ -80,20 +80,24 @@ namespace Renderer
             auto ballYBottom = this->vertices_[COORDINATES_BY_VERTEX+1];
 
             if (ballXLeft > objectXRight || ballXRight < objectXLeft) {
-                return;
+                return false;
             }
 
             if (ballYTop > objectYBottom && ballYTop < objectYTop) {
                 direction_[1] = -1;
-                return;
+                return true;
             }
 
             if (ballYBottom < objectYTop && ballYBottom > objectYBottom) {
                 direction_[1] = 1;
-                return;
+                return true;
             }
 
+            return false;
+
         }
+
+
 
         unsigned int getTotalVertices()
         {

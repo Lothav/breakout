@@ -57,8 +57,8 @@ int main(int argc, char* args[]) {
     std::array<Renderer::Block *, 33> blocks;
     for (int i = 0; i < 33; ++i) {
         blocks[i] = new Renderer::Block(
-            -.8f + BLOCK_WIDTH * (i % 11),
-            0.8f - BLOCK_HEIGHT * static_cast<float>(floor(i / 11))
+                -.8f + BLOCK_WIDTH * (i % 11),
+                0.8f - BLOCK_HEIGHT * static_cast<float>(floor(i / 11))
         );
     }
 
@@ -87,19 +87,19 @@ int main(int argc, char* args[]) {
         ball->checkWallCollision();
         ball->checkObjectCollision(player_vertices);
 
-        for (auto block : blocks) {
-            ball->checkObjectCollision(block->getArrayVertices());
-        }
-
         ball->moveBall();
 
         meshes->clear();
+        for (auto block : blocks) {
+            if (block->isAlive()) {
+                if (ball->checkObjectCollision(block->getArrayVertices())) {
+                    block->changeVisibility();
+                }
+                meshes->insert(block->getVertices(), block->getTotalVertices());
+            }
+        }
         meshes->insert(player1->getVertices(), player1->getTotalVertices());
         meshes->insert(ball->getVertices(), ball->getTotalVertices());
-        for (int i = 0; i < 33; ++i) {
-            meshes->insert(blocks[i]->getVertices(), blocks[i]->getTotalVertices());
-            blocks[i];
-        }
         vertex->setBufferData(meshes->getByteSize(), meshes->get());
         // Set screen to black
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
