@@ -84,6 +84,7 @@ int main(int argc, char* args[]) {
         }
 
         ball->moveBall();
+        ball->checkCollision();
 
         meshes->clear();
         meshes->insert(player1->getVertices(), player1->getTotalVertices());
