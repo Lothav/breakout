@@ -26,7 +26,7 @@
 #define BLOCK_WIDTH  0.16f
 #define BLOCK_HEIGHT 0.1f
 
-namespace Renderer
+namespace Entity
 {
     class Block
     {

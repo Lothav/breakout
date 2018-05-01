@@ -4,10 +4,10 @@
 #include "renderer/Shader.hpp"
 #include "renderer/Vertex.hpp"
 #include "renderer/Uniform.hpp"
-#include "renderer/Player.hpp"
+#include "entity/Player.hpp"
 #include "renderer/Meshes.hpp"
-#include "renderer/Block.hpp"
-#include "renderer/Ball.hpp"
+#include "entity/Block.hpp"
+#include "entity/Ball.hpp"
 
 /* This binary should check for updates and update the data files, the client and itself for non-console platforms (If internet connection)
  * Update server should be just an SFTP or something, can have the key inside the source code.
@@ -50,13 +50,13 @@ int main(int argc, char* args[]) {
     auto* vertex = new Renderer::Vertex(shader->getShaderProgram());
     auto* meshes = new Renderer::Meshes();
 
-    auto* player1 = new Renderer::Player(0.0f, -0.8f, 0.24f, 0.06f);
-    auto* ball = new Renderer::Ball(0.0f, 0.0f, 0.24f);
+    auto* player1 = new Entity::Paddle(0.0f, -0.8f, 0.24f, 0.06f);
+    auto* ball = new Entity::Ball(0.0f, 0.0f, 0.24f);
 
     std::srand(static_cast<unsigned int>(std::time(nullptr)));
-    std::array<Renderer::Block *, 33> blocks;
+    std::array<Entity::Block *, 33> blocks;
     for (int i = 0; i < 33; ++i) {
-        blocks[i] = new Renderer::Block(
+        blocks[i] = new Entity::Block(
                 -.8f + BLOCK_WIDTH * (i % 11),
                 0.8f - BLOCK_HEIGHT * static_cast<float>(floor(i / 11))
         );

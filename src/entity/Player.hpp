@@ -15,9 +15,9 @@
 
 #define SIZE_VERTICES PLAYER_VERTICES*COORDINATES_BY_VERTEX
 
-namespace Renderer
+namespace Entity
 {
-    class Player
+    class Paddle
     {
     private:
 
@@ -30,7 +30,7 @@ namespace Renderer
 
     public:
 
-        Player(float x, float y, float width, float height) : x(x), y(y), height(height), width(width)
+        Paddle(float x, float y, float width, float height) : x(x), y(y), height(height), width(width)
         {
             vertices = {
                     // Triangles                                            c ___

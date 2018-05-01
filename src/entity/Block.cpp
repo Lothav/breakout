@@ -5,12 +5,12 @@
 #include "Block.hpp"
 
 
-GLfloat* Renderer::Block::getVertices()
+GLfloat* Entity::Block::getVertices()
 {
     return this->vertices_.data();
 }
 
-unsigned int Renderer::Block::getTotalVertices()
+unsigned int Entity::Block::getTotalVertices()
 {
     return BLOCK_SIZE_VERTICES;
 }

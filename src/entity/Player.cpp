@@ -3,7 +3,7 @@
 //
 #include "Player.hpp"
 
-void Renderer::Player::move(float x, float y)
+void Entity::Paddle::move(float x, float y)
 {
     auto playerXWallRight = this->vertices[0]+x;
     auto playerXWallLeft  = this->vertices[COORDINATES_BY_VERTEX]+x;
@@ -16,17 +16,17 @@ void Renderer::Player::move(float x, float y)
     }
 }
 
-std::array<GLfloat, SIZE_VERTICES> Renderer::Player::getArrayVertices()
+std::array<GLfloat, SIZE_VERTICES> Entity::Paddle::getArrayVertices()
 {
     return this->vertices;
 };
 
-GLfloat* Renderer::Player::getVertices()
+GLfloat* Entity::Paddle::getVertices()
 {
     return this->vertices.data();
 }
 
-unsigned int Renderer::Player::getTotalVertices()
+unsigned int Entity::Paddle::getTotalVertices()
 {
     return SIZE_VERTICES;
 }

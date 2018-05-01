@@ -17,7 +17,7 @@
 #define BALL_WIDTH  0.06f
 #define BALL_HEIGHT 0.06f
 
-namespace Renderer
+namespace Entity
 {
     class Ball {
     private:

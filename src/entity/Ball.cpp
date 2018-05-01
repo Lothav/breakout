@@ -4,7 +4,7 @@
 
 #include "Ball.hpp"
 
-void Renderer::Ball::moveBall()
+void Entity::Ball::moveBall()
 {
     int i;
     for (i = 0; i < BALL_SIZE_VERTICES; i += COORDINATES_BY_VERTEX) {
@@ -13,7 +13,7 @@ void Renderer::Ball::moveBall()
     }
 }
 
-void Renderer::Ball::checkWallCollision()
+void Entity::Ball::checkWallCollision()
 {
     auto ballXLeft   = this->vertices_[COORDINATES_BY_VERTEX];
     auto ballXRight  = this->vertices_[0];
@@ -27,7 +27,7 @@ void Renderer::Ball::checkWallCollision()
     if (ballYBottom <= -0.95f) direction_[1] =  1;
 }
 
-bool Renderer::Ball::checkObjectCollision(std::array<GLfloat, BALL_SIZE_VERTICES> object)
+bool Entity::Ball::checkObjectCollision(std::array<GLfloat, BALL_SIZE_VERTICES> object)
 {
     auto objectXRight  = object[0];
     auto objectYTop    = object[1];
@@ -57,12 +57,12 @@ bool Renderer::Ball::checkObjectCollision(std::array<GLfloat, BALL_SIZE_VERTICES
 
 }
 
-unsigned int Renderer::Ball::getTotalVertices()
+unsigned int Entity::Ball::getTotalVertices()
 {
     return BALL_SIZE_VERTICES;
 }
 
-GLfloat* Renderer::Ball::getVertices()
+GLfloat* Entity::Ball::getVertices()
 {
     return this->vertices_.data();
 }
