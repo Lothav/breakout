@@ -101,7 +101,7 @@ int main(int argc, char* argv[]) {
                     velocity = -(SCREEN_WIDTH / 2.0f - mouseX) / 10000.0f;
                 }
 
-                if (e.type == SDL_QUIT) {
+                if (e.type == SDL_QUIT || e.key.keysym.sym == SDLK_q) {
                     return false;
                 }
             }
