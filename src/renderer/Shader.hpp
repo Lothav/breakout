@@ -40,12 +40,15 @@ namespace Renderer {
         }
 
         void createGraphicShader(GLenum, std::string);
+
         GLuint getShaderProgram();
+
         void beginProgram();
 
     private:
 
         void compileShader(GLuint);
+
         std::string loadShaderFileContent(std::string);
 
     };
