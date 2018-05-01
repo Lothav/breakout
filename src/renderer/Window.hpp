@@ -60,13 +60,9 @@ namespace Renderer {
             SDL_Quit();
         }
 
-        SDL_Window* getWindow() {
-            return this->window;
-        }
+        SDL_Window* getWindow();
 
-        SDL_Renderer* getRenderer() {
-            return this->renderer;
-        }
+        SDL_Renderer* getRenderer();
     };
 
 }
