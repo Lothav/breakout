@@ -83,8 +83,10 @@ int main(int argc, char* args[]) {
             if(e.type == SDL_QUIT) return false;
         }
 
+        auto player_vertices = player1->getArrayVertices();
+        ball->checkWallCollision();
+        ball->checkObjectCollision(player_vertices);
         ball->moveBall();
-        ball->checkCollision();
 
         meshes->clear();
         meshes->insert(player1->getVertices(), player1->getTotalVertices());

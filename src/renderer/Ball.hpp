@@ -19,8 +19,7 @@
 
 namespace Renderer
 {
-    class Ball
-    {
+    class Ball {
     private:
 
         float x_;
@@ -31,51 +30,67 @@ namespace Renderer
         std::array<GLfloat, BALL_SIZE_VERTICES> vertices_;
 
     public:
-        Ball(float x, float y, float speed): x_(x), y_(y), speed_(speed)
-        {
+        Ball(float x, float y, float speed) : x_(x), y_(y), speed_(speed) {
             speed_ = 0.0005f;
             direction_ = {1.0f, .1f};
             vertices_ = {
                     // Triangles                                                      c ___
-                    x + (BALL_WIDTH/2), y + (BALL_HEIGHT/2), 0.0f, 1.0f, 0.0f, // a    |  /a
-                    x - (BALL_WIDTH/2), y - (BALL_HEIGHT/2), 0.0f, 0.0f, 1.0f, // b    | /
-                    x - (BALL_WIDTH/2), y + (BALL_HEIGHT/2), 0.0f, 0.0f, 0.0f, // c   b|/
+                    x + (BALL_WIDTH / 2), y + (BALL_HEIGHT / 2), 0.0f, 1.0f, 0.0f, // a    |  /a
+                    x - (BALL_WIDTH / 2), y - (BALL_HEIGHT / 2), 0.0f, 0.0f, 1.0f, // b    | /
+                    x - (BALL_WIDTH / 2), y + (BALL_HEIGHT / 2), 0.0f, 0.0f, 0.0f, // c   b|/
 
-                    x + (BALL_WIDTH/2), y + (BALL_HEIGHT/2), 0.0f, 1.0f, 0.0f, // d       /|d
-                    x - (BALL_WIDTH/2), y - (BALL_HEIGHT/2), 0.0f, 0.0f, 1.0f, // e      / |
-                    x + (BALL_WIDTH/2), y - (BALL_HEIGHT/2), 0.0f, 1.0f, 1.0f, // f    e/__|f
+                    x + (BALL_WIDTH / 2), y + (BALL_HEIGHT / 2), 0.0f, 1.0f, 0.0f, // d       /|d
+                    x - (BALL_WIDTH / 2), y - (BALL_HEIGHT / 2), 0.0f, 0.0f, 1.0f, // e      / |
+                    x + (BALL_WIDTH / 2), y - (BALL_HEIGHT / 2), 0.0f, 1.0f, 1.0f, // f    e/__|f
             };
         }
 
-        void moveBall()
-        {
+        void moveBall() {
             int i;
             for (i = 0; i < BALL_SIZE_VERTICES; i += COORDINATES_BY_VERTEX) {
-                vertices_[i]   += speed_ * direction_[0]; // x
-                vertices_[i+1] += speed_ * direction_[1]; // y
+                vertices_[i] += speed_ * direction_[0]; // x
+                vertices_[i + 1] += speed_ * direction_[1]; // y
             }
         }
 
-        void checkCollision()
+        void checkWallCollision()
         {
-            auto ballXWallLeft = this->vertices_[COORDINATES_BY_VERTEX];
-            if (ballXWallLeft >= 0.95f) {
-                direction_[0] = -1;
+            auto ballXLeft   = this->vertices_[COORDINATES_BY_VERTEX];
+            auto ballXRight  = this->vertices_[0];
+            auto ballYTop    = this->vertices_[1];
+            auto ballYBottom = this->vertices_[1];
+
+            // Check wall collision
+            if (ballXLeft >= 0.95f)    direction_[0] = -1;
+            if (ballXRight <= -0.95f)  direction_[0] =  1;
+            if (ballYTop >= 1.f)       direction_[1] = -1;
+            if (ballYBottom <= -0.95f) direction_[1] =  1;
+        }
+
+        void checkObjectCollision(std::array<GLfloat, BALL_SIZE_VERTICES> object)
+        {
+            auto objectXRight  = object[0];
+            auto objectYTop    = object[1];
+            auto objectXLeft   = object[COORDINATES_BY_VERTEX];
+            auto objectYBottom = object[COORDINATES_BY_VERTEX+1];
+
+            auto ballXRight  = this->vertices_[0];
+            auto ballYTop    = this->vertices_[1];
+            auto ballXLeft   = this->vertices_[COORDINATES_BY_VERTEX];
+            auto ballYBottom = this->vertices_[COORDINATES_BY_VERTEX+1];
+
+            if (ballXLeft > objectXRight || ballXRight < objectXLeft) {
+                return;
             }
 
-            auto ballXWallRight  = this->vertices_[0];
-            if (ballXWallRight <= -0.95f) {
-                direction_[0] = 1;
-            }
-
-            auto ballYWallTop = this->vertices_[1];
-            if (ballYWallTop >= 1.f) {
+            if (ballYTop > objectYBottom && ballYTop < objectYTop) {
                 direction_[1] = -1;
+                return;
             }
 
-            auto ballYWallBottom = this->vertices_[1];
-            if (ballYWallBottom <= -0.95f) {
+            if (ballYBottom < objectYTop && ballYBottom > objectYBottom) {
                 direction_[1] = 1;
+                return;
             }
 
         }
