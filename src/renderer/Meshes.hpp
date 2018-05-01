@@ -7,6 +7,8 @@
 
 #include <vector>
 #include <GLES3/gl3.h>
+#include <iostream>
+#include "../memory/Provider.hpp"
 
 namespace Renderer
 {
@@ -31,30 +33,15 @@ namespace Renderer
             std::cerr << "call delete for non-delete heap memory!" << std::endl;
         }
 
-        void insert(GLfloat* mesh, unsigned int meshes_size)
-        {
-            for(unsigned int i = 0; i < meshes_size; i++) this->meshes.push_back(mesh[i]);
-        }
+        void insert(GLfloat* mesh, unsigned int meshes_size);
 
-        void clear()
-        {
-            this->meshes.clear();
-        }
+        void clear();
 
-        GLfloat * get()
-        {
-            return this->meshes.data();
-        }
+        GLfloat * get();
 
-        unsigned long getByteSize()
-        {
-            return this->meshes.size() * sizeof(GLfloat);
-        }
+        unsigned long getByteSize();
 
-        unsigned long getSize()
-        {
-            return this->meshes.size();
-        }
+        unsigned long getSize();
     };
 
 }
