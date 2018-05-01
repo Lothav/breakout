@@ -6,7 +6,7 @@
 #define ONYX_DRAW_H
 
 #include <vector>
-#include <GLES3/gl3.h>
+#include <GL/gl.h>
 #include <iostream>
 #include "../memory/Provider.hpp"
 #include "../memory/Allocator.hpp"

@@ -1,7 +1,7 @@
 #ifndef ONYX_UNIFORM_HPP
 #define ONYX_UNIFORM_HPP
 
-#include <GLES3/gl3.h>
+#include <GL/glew.h>
 #include <SDL2/SDL_surface.h>
 #include <SDL2/SDL_image.h>
 #include <string>

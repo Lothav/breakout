@@ -1,7 +1,7 @@
 #ifndef ONYX_VERTEX_HPP
 #define ONYX_VERTEX_HPP
 
-#include <GLES3/gl3.h>
+#include <GL/glew.h>
 #include "../memory/Provider.hpp"
 
 #define VERTEX_LINE_SIZE 5 // (x, y, z, u, v)

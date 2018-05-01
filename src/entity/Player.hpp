@@ -5,7 +5,7 @@
 #ifndef ONYX_PLAYER_H
 #define ONYX_PLAYER_H
 
-#include <GLES3/gl3.h>
+#include <GL/gl.h>
 #include <algorithm>
 #include <array>
 #include "../memory/Provider.hpp"

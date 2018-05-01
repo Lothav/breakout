@@ -24,7 +24,7 @@
 
 #define TOTAL_BLOCKS 33
 
-int main(int argc, char* args[]) {
+int main(int argc, char* argv[]) {
 
     Memory::Provider::initPools();
 
@@ -40,6 +40,14 @@ int main(int argc, char* args[]) {
 
     {
         auto window = std::make_unique<Renderer::Window>(SCREEN_WIDTH, SCREEN_HEIGHT);
+
+        auto mainContext = SDL_GL_CreateContext(window->getWindow());
+
+        GLenum err = glewInit();
+        if (err != GLEW_OK) {
+            std::cerr << "Glew is not ok =(" << std::endl;
+            exit(1);
+        }
 
         auto shader = std::make_unique<Renderer::Shader>();
         shader->createGraphicShader(GL_VERTEX_SHADER, "default.vert");
@@ -63,21 +71,24 @@ int main(int argc, char* args[]) {
 
         int i = -1;
         std::generate(
-                std::begin(blocks),
-                std::end(blocks),
-                [&i]() {
-                    i++;
-                    return std::make_unique<Entity::Block>(
-                            -.8f + BLOCK_WIDTH * (i % 11),
-                            0.8f - BLOCK_HEIGHT * static_cast<float>(floor(i / 11))
-                    );
-                }
+            std::begin(blocks),
+            std::end(blocks),
+            [&i]() {
+                i++;
+                return std::make_unique<Entity::Block>(
+                        -.8f + BLOCK_WIDTH * (i % 11),
+                        0.8f - BLOCK_HEIGHT * static_cast<float>(floor(i / 11))
+                );
+            }
         );
 
         auto *SDL_window = window->getWindow();
 
         float velocity = 0;
         auto loop = [&]() -> bool {
+
+            auto start = SDL_GetTicks();
+
             player1->move(velocity, .0f);
 
             SDL_Event e;
@@ -85,9 +96,9 @@ int main(int argc, char* args[]) {
                 auto mouseX = e.motion.x;
 
                 if (mouseX > SCREEN_WIDTH / 2) {
-                    velocity = (mouseX - SCREEN_WIDTH / 2.0f) / 1000000.0f;
+                    velocity = (mouseX - SCREEN_WIDTH / 2.0f) / 10000.0f;
                 } else if (mouseX > 0 && mouseX < SCREEN_WIDTH / 2) {
-                    velocity = -(SCREEN_WIDTH / 2.0f - mouseX) / 1000000.0f;
+                    velocity = -(SCREEN_WIDTH / 2.0f - mouseX) / 10000.0f;
                 }
 
                 if (e.type == SDL_QUIT) {
@@ -120,6 +131,10 @@ int main(int argc, char* args[]) {
             auto count_meshes = static_cast<GLsizei>(meshes->getSize());
             glDrawArrays(GL_TRIANGLES, 0, count_meshes);
             SDL_GL_SwapWindow(SDL_window);
+
+            if (1000/60 > (SDL_GetTicks() - start)) {
+                SDL_Delay(1000/60- (SDL_GetTicks()-start));
+            }
 #ifdef DEBUG
             return false;
 #else
@@ -132,8 +147,11 @@ int main(int argc, char* args[]) {
 #else
         while(loop());
 #endif
+        SDL_GL_DeleteContext(mainContext);
     }
 
     Memory::Provider::destroyPools();
+    SDL_Quit();
+    glEnd();
     return EXIT_SUCCESS;
 }

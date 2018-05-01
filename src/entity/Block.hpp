@@ -6,7 +6,7 @@
 #define BREAKOUT_BLOCK_HPP
 
 #include <array>
-#include <GLES3/gl3.h>
+#include <GL/gl.h>
 #include <ctime>
 #include "../memory/Pool.hpp"
 #include "../memory/Provider.hpp"

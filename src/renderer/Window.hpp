@@ -27,7 +27,7 @@ namespace Renderer {
                 "Breakout",
                 SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
                 screen_width, screen_height,
-                SDL_WINDOW_SHOWN | SDL_WINDOW_INPUT_FOCUS
+                SDL_WINDOW_SHOWN | SDL_WINDOW_INPUT_FOCUS | SDL_WINDOW_OPENGL
             );
             if (this->window == nullptr) {
                 fprintf(stderr, "Could not create window: %s\n", SDL_GetError());
@@ -35,10 +35,11 @@ namespace Renderer {
             }
 
             SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
-            SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
+            SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
             SDL_GL_SetSwapInterval(0);
             SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
             SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
+            SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 
             this->renderer = SDL_CreateRenderer(this->window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_TARGETTEXTURE);
         }

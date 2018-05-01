@@ -1,7 +1,7 @@
 #ifndef ONYX_SHADER_HPP
 #define ONYX_SHADER_HPP
 
-#include <GLES3/gl3.h>
+#include <GL/glew.h>
 #include <fstream>
 #include <cassert>
 #include <vector>

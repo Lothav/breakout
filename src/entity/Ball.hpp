@@ -5,12 +5,12 @@
 #ifndef BREAKOUT_BALL_HPP
 #define BREAKOUT_BALL_HPP
 
-#include <GLES3/gl3.h>
+#include <GL/gl.h>
 #include <array>
 #include <iostream>
 #include "../memory/Provider.hpp"
 
-#define COORDINATES_BY_VERTEX 5   // 5 coords each (x, y, z, u, v)
+#define COORDINATES_BY_VERTEX 5 // 5 coords each (x, y, z, u, v)
 #define BALL_VERTICES 6         // 6 points (two triangles
 
 #define BALL_SIZE_VERTICES BALL_VERTICES*COORDINATES_BY_VERTEX
@@ -32,7 +32,7 @@ namespace Entity
 
     public:
         Ball(float x, float y, float speed) : x_(x), y_(y), speed_(speed) {
-            speed_ = 0.0005f;
+            speed_ = 0.005f;
             direction_ = {1.0f, 1.0f};
             vertices_ = {
                     // Triangles                                                          c ___
