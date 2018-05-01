@@ -34,7 +34,7 @@ namespace Renderer
         Ball(float x, float y, float speed): x_(x), y_(y), speed_(speed)
         {
             speed_ = 0.0005f;
-            direction_ = {1.0f, .05f};
+            direction_ = {1.0f, .1f};
             vertices_ = {
                     // Triangles                                                      c ___
                     x + (BALL_WIDTH/2), y + (BALL_HEIGHT/2), 0.0f, 1.0f, 0.0f, // a    |  /a
@@ -59,15 +59,25 @@ namespace Renderer
         void checkCollision()
         {
             auto ballXWallLeft = this->vertices_[COORDINATES_BY_VERTEX];
-            if (ballXWallLeft >= 1.0f) {
+            if (ballXWallLeft >= 0.95f) {
                 direction_[0] = -1;
             }
 
-            std::cout << ballXWallLeft << std::endl;
             auto ballXWallRight  = this->vertices_[0];
-            if (ballXWallRight <= -1.f) {
+            if (ballXWallRight <= -0.95f) {
                 direction_[0] = 1;
             }
+
+            auto ballYWallTop = this->vertices_[1];
+            if (ballYWallTop >= 1.f) {
+                direction_[1] = -1;
+            }
+
+            auto ballYWallBottom = this->vertices_[1];
+            if (ballYWallBottom <= -0.95f) {
+                direction_[1] = 1;
+            }
+
         }
 
         unsigned int getTotalVertices()
