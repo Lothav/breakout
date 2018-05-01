@@ -86,6 +86,11 @@ int main(int argc, char* args[]) {
         auto player_vertices = player1->getArrayVertices();
         ball->checkWallCollision();
         ball->checkObjectCollision(player_vertices);
+
+        for (auto block : blocks) {
+            ball->checkObjectCollision(block->getArrayVertices());
+        }
+
         ball->moveBall();
 
         meshes->clear();

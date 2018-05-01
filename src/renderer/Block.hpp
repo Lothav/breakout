@@ -83,6 +83,11 @@ namespace Renderer
             std::cerr << "call delete for non-delete heap memory!" << std::endl;
         }
 
+        std::array<GLfloat, BLOCK_SIZE_VERTICES> getArrayVertices()
+        {
+            return vertices_;
+        }
+
         GLfloat* getVertices();
         unsigned int getTotalVertices();
     };

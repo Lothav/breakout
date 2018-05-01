@@ -32,9 +32,9 @@ namespace Renderer
     public:
         Ball(float x, float y, float speed) : x_(x), y_(y), speed_(speed) {
             speed_ = 0.0005f;
-            direction_ = {1.0f, .1f};
+            direction_ = {1.0f, 1.0f};
             vertices_ = {
-                    // Triangles                                                      c ___
+                    // Triangles                                                          c ___
                     x + (BALL_WIDTH / 2), y + (BALL_HEIGHT / 2), 0.0f, 1.0f, 0.0f, // a    |  /a
                     x - (BALL_WIDTH / 2), y - (BALL_HEIGHT / 2), 0.0f, 0.0f, 1.0f, // b    | /
                     x - (BALL_WIDTH / 2), y + (BALL_HEIGHT / 2), 0.0f, 0.0f, 0.0f, // c   b|/
