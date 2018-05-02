@@ -24,7 +24,7 @@ int main(int argc, char* argv[]) {
         return EXIT_FAILURE;
     }
 
-    if (IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG) == 0) {
+    if (IMG_Init(IMG_INIT_JPG) == 0) {
         std::cerr << "Could not initialize IMG's flags" << std::endl;
         return EXIT_FAILURE;
     }
@@ -77,7 +77,10 @@ int main(int argc, char* argv[]) {
         texture->loadTexture("./data/breakout-blocks-texture.jpg", GL_RGB);
 
         auto texture2 = std::make_unique<Renderer::Uniform>(1);
-        texture2->loadTexture("./data/launcher.png", GL_RGBA);
+        texture2->loadTexture("./data/paddle.jpg", GL_RGB);
+
+        auto texture3 = std::make_unique<Renderer::Uniform>(2);
+        texture3->loadTexture("./data/ball.jpg", GL_RGB);
 
         auto loop = [&]() -> bool {
 
@@ -119,6 +122,7 @@ int main(int argc, char* argv[]) {
 
             ball->moveBall();
 
+
             texture->setUniform(shader->getShaderProgram(), UNIFORM_TYPE_TEXTURE);
             texture->setUniform(shader->getShaderProgram(), UNIFORM_TYPE_MAT4);
 
@@ -136,18 +140,33 @@ int main(int argc, char* argv[]) {
             auto count_meshes = static_cast<GLsizei>(meshes->getSize());
             glDrawArrays(GL_TRIANGLES, 0, count_meshes);
 
+
+
             texture2->setUniform(shader->getShaderProgram(), UNIFORM_TYPE_TEXTURE);
             texture2->setUniform(shader->getShaderProgram(), UNIFORM_TYPE_MAT4);
 
             meshes->clear();
             meshes->insert(player1->getVertices(), player1->getTotalVertices());
+
+            vertex->setBufferData(meshes->getByteSize(), meshes->get());
+            count_meshes = static_cast<GLsizei>(meshes->getSize());
+            glDrawArrays(GL_TRIANGLES, 0, count_meshes);
+
+
+
+            texture3->setUniform(shader->getShaderProgram(), UNIFORM_TYPE_TEXTURE);
+            texture3->setUniform(shader->getShaderProgram(), UNIFORM_TYPE_MAT4);
+
+            meshes->clear();
             meshes->insert(ball->getVertices(), ball->getTotalVertices());
 
             vertex->setBufferData(meshes->getByteSize(), meshes->get());
             count_meshes = static_cast<GLsizei>(meshes->getSize());
             glDrawArrays(GL_TRIANGLES, 0, count_meshes);
-            SDL_GL_SwapWindow(SDL_window);
 
+
+
+            SDL_GL_SwapWindow(SDL_window);
 
 
             if (1000/60 > (SDL_GetTicks() - start)) {
