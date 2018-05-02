@@ -46,41 +46,39 @@ int main(int argc, char* argv[]) {
         shader->beginProgram();
 
         auto vertex = std::make_unique<Renderer::Vertex>(shader->getShaderProgram());
-
-        auto player1 = std::make_unique<Entity::Paddle>(0.0f, -0.8f, 0.24f, 0.06f);
-        auto ball = std::make_unique<Entity::Ball>(0.0f, 0.0f, 0.24f);
-
         auto meshes = std::make_unique<Renderer::Meshes>();
-
-        std::srand(static_cast<unsigned int>(std::time(nullptr)));
-        std::unique_ptr<Entity::Block> blocks[TOTAL_BLOCKS];
-
-        int i = -1;
-        std::generate(
-            std::begin(blocks),
-            std::end(blocks),
-            [&i]() {
-                i++;
-                return std::make_unique<Entity::Block>(
-                        -.8f + BLOCK_WIDTH * (i % 11),
-                        0.8f - BLOCK_HEIGHT * static_cast<float>(floor(i / 11))
-                );
-            }
-        );
 
         auto *SDL_window = window->getWindow();
 
         float velocity = 0;
         bool pause = false;
+        bool first_frame = true;
 
-        auto texture = std::make_unique<Renderer::Uniform>(0);
-        texture->loadTexture("./data/breakout-blocks-texture.jpg", GL_RGB);
+        auto blocks_texture = std::make_unique<Renderer::Uniform>(0);
+        blocks_texture->loadTexture("./data/breakout-blocks-texture.jpg", GL_RGB);
 
-        auto texture2 = std::make_unique<Renderer::Uniform>(1);
-        texture2->loadTexture("./data/paddle.jpg", GL_RGB);
+        auto paddle_texture = std::make_unique<Renderer::Uniform>(1);
+        paddle_texture->loadTexture("./data/paddle.jpg", GL_RGB);
 
-        auto texture3 = std::make_unique<Renderer::Uniform>(2);
-        texture3->loadTexture("./data/ball.jpg", GL_RGB);
+        auto ball_texture = std::make_unique<Renderer::Uniform>(2);
+        ball_texture->loadTexture("./data/ball.jpg", GL_RGB);
+
+        Entity::Paddle* player1 = nullptr;
+        Entity::Ball* ball = nullptr;
+        Entity::Block* blocks[TOTAL_BLOCKS];
+
+        auto restart = [&]() {
+            meshes->clear();
+            player1 = new Entity::Paddle(0.0f, -0.8f, 0.24f, 0.06f);
+            ball = new Entity::Ball(0.0f, 0.0f, 0.24f);
+            std::srand(static_cast<unsigned int>(std::time(nullptr)));
+            for (int i = 0; i < TOTAL_BLOCKS; i++) {
+                blocks[i] = new Entity::Block(-.8f + BLOCK_WIDTH * (i % 11), 0.8f - BLOCK_HEIGHT * static_cast<float>(floor(i / 11)));
+            }
+            first_frame = true;
+        };
+
+        restart();
 
         auto loop = [&]() -> bool {
 
@@ -100,8 +98,14 @@ int main(int argc, char* argv[]) {
                     return false;
                 }
 
+                if (e.type == SDL_KEYDOWN) {
+                    if (e.key.keysym.sym == SDLK_r) {
+                        restart();
+                    }
+                }
+
                 if(e.type == SDL_MOUSEBUTTONDOWN) {
-                    if(e.button.button == SDL_BUTTON_LEFT){
+                    if (e.button.button == SDL_BUTTON_LEFT) {
                         pause = !pause;
                     }
                 }
@@ -123,11 +127,11 @@ int main(int argc, char* argv[]) {
             ball->moveBall();
 
 
-            texture->setUniform(shader->getShaderProgram(), UNIFORM_TYPE_TEXTURE);
-            texture->setUniform(shader->getShaderProgram(), UNIFORM_TYPE_MAT4);
+            blocks_texture->setUniform(shader->getShaderProgram(), UNIFORM_TYPE_TEXTURE);
+            blocks_texture->setUniform(shader->getShaderProgram(), UNIFORM_TYPE_MAT4);
 
             meshes->clear();
-            for (i = 0; i < TOTAL_BLOCKS; ++i) {
+            for (int i = 0; i < TOTAL_BLOCKS; ++i) {
                 if (blocks[i]->isAlive()) {
                     if (ball->checkObjectCollision(blocks[i]->getArrayVertices())) {
                         blocks[i]->changeVisibility();
@@ -142,8 +146,8 @@ int main(int argc, char* argv[]) {
 
 
 
-            texture2->setUniform(shader->getShaderProgram(), UNIFORM_TYPE_TEXTURE);
-            texture2->setUniform(shader->getShaderProgram(), UNIFORM_TYPE_MAT4);
+            paddle_texture->setUniform(shader->getShaderProgram(), UNIFORM_TYPE_TEXTURE);
+            paddle_texture->setUniform(shader->getShaderProgram(), UNIFORM_TYPE_MAT4);
 
             meshes->clear();
             meshes->insert(player1->getVertices(), player1->getTotalVertices());
@@ -154,8 +158,8 @@ int main(int argc, char* argv[]) {
 
 
 
-            texture3->setUniform(shader->getShaderProgram(), UNIFORM_TYPE_TEXTURE);
-            texture3->setUniform(shader->getShaderProgram(), UNIFORM_TYPE_MAT4);
+            ball_texture->setUniform(shader->getShaderProgram(), UNIFORM_TYPE_TEXTURE);
+            ball_texture->setUniform(shader->getShaderProgram(), UNIFORM_TYPE_MAT4);
 
             meshes->clear();
             meshes->insert(ball->getVertices(), ball->getTotalVertices());
@@ -172,6 +176,12 @@ int main(int argc, char* argv[]) {
             if (1000/60 > (SDL_GetTicks() - start)) {
                 SDL_Delay(1000/60 - (SDL_GetTicks()-start));
             }
+
+            if (first_frame) {
+                pause = true;
+                first_frame = false;
+            }
+
 #ifdef DEBUG
             return false;
 #else
