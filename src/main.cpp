@@ -103,12 +103,14 @@ int main(int argc, char* argv[]) {
                     return false;
                 }
 
+                // Restart if hit 'r'
                 if (e.type == SDL_KEYDOWN) {
                     if (e.key.keysym.sym == SDLK_r) {
                         restart();
                     }
                 }
 
+                // Restart if hit left mouse button
                 if(e.type == SDL_MOUSEBUTTONDOWN) {
                     if (e.button.button == SDL_BUTTON_LEFT) {
                         pause = !pause;
