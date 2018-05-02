@@ -83,6 +83,8 @@ int main(int argc, char* argv[]) {
         };
         restart();
 
+
+        int ball_speed = 0;
         // Main Loop
         auto loop = [&]() -> bool {
 
@@ -119,6 +121,12 @@ int main(int argc, char* argv[]) {
             }
             if (pause) {
                 return true;
+            }
+
+            ball_speed++;
+            if(ball_speed % 250 == 0) {
+                ball->increaseSpeed(0.001f);
+                ball_speed = 0;
             }
 
             // Set screen to black

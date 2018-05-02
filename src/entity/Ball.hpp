@@ -61,6 +61,11 @@ namespace Entity
 
         unsigned int getTotalVertices();
 
+        void increaseSpeed(float plus)
+        {
+            speed_ += plus;
+        }
+
         GLfloat* getVertices();
 
     };
