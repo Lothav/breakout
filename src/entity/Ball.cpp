@@ -13,7 +13,7 @@ void Entity::Ball::moveBall()
     }
 }
 
-void Entity::Ball::checkWallCollision()
+bool Entity::Ball::checkWallCollision()
 {
     auto ballXLeft   = this->vertices_[COORDINATES_BY_VERTEX];
     auto ballXRight  = this->vertices_[0];
@@ -24,7 +24,9 @@ void Entity::Ball::checkWallCollision()
     if (ballXLeft >= 0.95f)    direction_[0] = -1;
     if (ballXRight <= -0.95f)  direction_[0] =  1;
     if (ballYTop >= 1.f)       direction_[1] = -1;
-    if (ballYBottom <= -0.95f) direction_[1] =  1;
+    if (ballYBottom <= -0.95f) return false;
+
+    return true;
 }
 
 bool Entity::Ball::checkObjectCollision(std::array<GLfloat, BALL_SIZE_VERTICES> object)

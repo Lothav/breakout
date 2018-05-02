@@ -24,9 +24,9 @@ namespace Memory
     };
 
     static std::array<PoolSt, 3> PoolsInfo = {
-            PoolSt{.size = 500000, .type = PoolType::POOL_TYPE_GENERIC},
-            PoolSt{.size = 50000,  .type = PoolType::POOL_TYPE_PLAYER},
-            PoolSt{.size = 50000,  .type = PoolType::POOL_TYPE_MESHES}
+            PoolSt{.size = 5000000, .type = PoolType::POOL_TYPE_GENERIC},
+            PoolSt{.size = 50000,   .type = PoolType::POOL_TYPE_PLAYER},
+            PoolSt{.size = 50000,   .type = PoolType::POOL_TYPE_MESHES}
     };
 
     class Pool

@@ -29,6 +29,7 @@ int main(int argc, char* argv[]) {
         return EXIT_FAILURE;
     }
 
+    // Unique Ptr's scope
     {
         auto window = std::make_unique<Renderer::Window>(SCREEN_WIDTH, SCREEN_HEIGHT);
 
@@ -54,6 +55,8 @@ int main(int argc, char* argv[]) {
         bool pause = false;
         bool first_frame = true;
 
+        // Init Textures
+
         auto blocks_texture = std::make_unique<Renderer::Uniform>(0);
         blocks_texture->loadTexture("./data/breakout-blocks-texture.jpg", GL_RGB);
 
@@ -69,6 +72,7 @@ int main(int argc, char* argv[]) {
 
         auto restart = [&]() {
             meshes->clear();
+            // Init ball, paddle and blocks
             player1 = new Entity::Paddle(0.0f, -0.8f, 0.24f, 0.06f);
             ball = new Entity::Ball(0.0f, 0.0f, 0.24f);
             std::srand(static_cast<unsigned int>(std::time(nullptr)));
@@ -77,13 +81,14 @@ int main(int argc, char* argv[]) {
             }
             first_frame = true;
         };
-
         restart();
 
+        // Main Loop
         auto loop = [&]() -> bool {
 
             auto start = SDL_GetTicks();
 
+            // Handle Input events
             SDL_Event e;
             while (SDL_PollEvent(&e)) {
                 auto mouseX = e.motion.x;
@@ -121,11 +126,14 @@ int main(int argc, char* argv[]) {
             player1->move(velocity, .0f);
 
             auto player_vertices = player1->getArrayVertices();
-            ball->checkWallCollision();
+            if(!ball->checkWallCollision()){
+                restart();
+            }
             ball->checkObjectCollision(player_vertices);
-
             ball->moveBall();
 
+
+            // Set Block Textures active and Draw
 
             blocks_texture->setUniform(shader->getShaderProgram(), UNIFORM_TYPE_TEXTURE);
             blocks_texture->setUniform(shader->getShaderProgram(), UNIFORM_TYPE_MAT4);
@@ -145,6 +153,7 @@ int main(int argc, char* argv[]) {
             glDrawArrays(GL_TRIANGLES, 0, count_meshes);
 
 
+            // Set Paddle Textures active and Draw
 
             paddle_texture->setUniform(shader->getShaderProgram(), UNIFORM_TYPE_TEXTURE);
             paddle_texture->setUniform(shader->getShaderProgram(), UNIFORM_TYPE_MAT4);
@@ -157,6 +166,7 @@ int main(int argc, char* argv[]) {
             glDrawArrays(GL_TRIANGLES, 0, count_meshes);
 
 
+            // Set Ball Textures active and Draw
 
             ball_texture->setUniform(shader->getShaderProgram(), UNIFORM_TYPE_TEXTURE);
             ball_texture->setUniform(shader->getShaderProgram(), UNIFORM_TYPE_MAT4);
@@ -169,10 +179,11 @@ int main(int argc, char* argv[]) {
             glDrawArrays(GL_TRIANGLES, 0, count_meshes);
 
 
-
+            // Swap Window
             SDL_GL_SwapWindow(SDL_window);
 
 
+            // Adjust FPS
             if (1000/60 > (SDL_GetTicks() - start)) {
                 SDL_Delay(1000/60 - (SDL_GetTicks()-start));
             }

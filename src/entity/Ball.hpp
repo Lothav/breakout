@@ -55,7 +55,7 @@ namespace Entity
 
         void moveBall();
 
-        void checkWallCollision();
+        bool checkWallCollision();
 
         bool checkObjectCollision(std::array<GLfloat, BALL_SIZE_VERTICES> object);
 
