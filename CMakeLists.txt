@@ -30,4 +30,4 @@ add_executable(
         src/entity/Ball.cpp
         src/entity/Ball.hpp
 )
-target_link_libraries(launcher SDL2 SDL2_image SDL2_ttf GL GLEW)
+target_link_libraries(launcher SDL2 SDL2_image GL GLEW)
