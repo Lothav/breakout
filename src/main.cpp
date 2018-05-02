@@ -10,15 +10,6 @@
 #include "entity/Block.hpp"
 #include "entity/Ball.hpp"
 
-/* This binary should check for updates and update the data files, the client and itself for non-console platforms (If internet connection)
- * Update server should be just an SFTP or something, can have the key inside the source code.
- * 1. Check for updates
- * 2. Check datafiles integrity against downloaded md5 references
- * References
- *   SelfUpdate (Windows): https://stackoverflow.com/questions/7483230/how-can-i-run-an-app-automatic-after-restart
- *	            (Linux  ): https://google.com
- */
-
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 600
 
@@ -33,7 +24,7 @@ int main(int argc, char* argv[]) {
         return EXIT_FAILURE;
     }
 
-    if (IMG_Init(IMG_INIT_JPG) == 0) {
+    if (IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG) == 0) {
         std::cerr << "Could not initialize IMG's flags" << std::endl;
         return EXIT_FAILURE;
     }
@@ -53,11 +44,6 @@ int main(int argc, char* argv[]) {
         shader->createGraphicShader(GL_VERTEX_SHADER, "default.vert");
         shader->createGraphicShader(GL_FRAGMENT_SHADER, "default.frag");
         shader->beginProgram();
-
-        auto texture = std::make_unique<Renderer::Uniform>();
-        texture->loadTexture("./data/breakout-blocks-texture.jpg");
-        texture->setUniform(shader->getShaderProgram(), UNIFORM_TYPE_TEXTURE);
-        texture->setUniform(shader->getShaderProgram(), UNIFORM_TYPE_MAT4);
 
         auto vertex = std::make_unique<Renderer::Vertex>(shader->getShaderProgram());
 
@@ -86,6 +72,13 @@ int main(int argc, char* argv[]) {
 
         float velocity = 0;
         bool pause = false;
+
+        auto texture = std::make_unique<Renderer::Uniform>(0);
+        texture->loadTexture("./data/breakout-blocks-texture.jpg", GL_RGB);
+
+        auto texture2 = std::make_unique<Renderer::Uniform>(1);
+        texture2->loadTexture("./data/launcher.png", GL_RGBA);
+
         auto loop = [&]() -> bool {
 
             auto start = SDL_GetTicks();
@@ -100,7 +93,7 @@ int main(int argc, char* argv[]) {
                     velocity = -(SCREEN_WIDTH / 2.0f - mouseX) / 10000.0f;
                 }
 
-                if (e.type == SDL_QUIT || e.key.keysym.sym == SDLK_q) {
+                if (e.type == SDL_QUIT || (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_q)) {
                     return false;
                 }
 
@@ -109,11 +102,14 @@ int main(int argc, char* argv[]) {
                         pause = !pause;
                     }
                 }
-
             }
             if (pause) {
                 return true;
             }
+
+            // Set screen to black
+            glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+            glClear(GL_COLOR_BUFFER_BIT);
 
             player1->move(velocity, .0f);
 
@@ -122,6 +118,9 @@ int main(int argc, char* argv[]) {
             ball->checkObjectCollision(player_vertices);
 
             ball->moveBall();
+
+            texture->setUniform(shader->getShaderProgram(), UNIFORM_TYPE_TEXTURE);
+            texture->setUniform(shader->getShaderProgram(), UNIFORM_TYPE_MAT4);
 
             meshes->clear();
             for (i = 0; i < TOTAL_BLOCKS; ++i) {
@@ -132,19 +131,27 @@ int main(int argc, char* argv[]) {
                     meshes->insert(blocks[i]->getVertices(), blocks[i]->getTotalVertices());
                 }
             }
+
+            vertex->setBufferData(meshes->getByteSize(), meshes->get());
+            auto count_meshes = static_cast<GLsizei>(meshes->getSize());
+            glDrawArrays(GL_TRIANGLES, 0, count_meshes);
+
+            texture2->setUniform(shader->getShaderProgram(), UNIFORM_TYPE_TEXTURE);
+            texture2->setUniform(shader->getShaderProgram(), UNIFORM_TYPE_MAT4);
+
+            meshes->clear();
             meshes->insert(player1->getVertices(), player1->getTotalVertices());
             meshes->insert(ball->getVertices(), ball->getTotalVertices());
-            vertex->setBufferData(meshes->getByteSize(), meshes->get());
-            // Set screen to black
-            glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-            glClear(GL_COLOR_BUFFER_BIT);
 
-            auto count_meshes = static_cast<GLsizei>(meshes->getSize());
+            vertex->setBufferData(meshes->getByteSize(), meshes->get());
+            count_meshes = static_cast<GLsizei>(meshes->getSize());
             glDrawArrays(GL_TRIANGLES, 0, count_meshes);
             SDL_GL_SwapWindow(SDL_window);
 
+
+
             if (1000/60 > (SDL_GetTicks() - start)) {
-                SDL_Delay(1000/60- (SDL_GetTicks()-start));
+                SDL_Delay(1000/60 - (SDL_GetTicks()-start));
             }
 #ifdef DEBUG
             return false;

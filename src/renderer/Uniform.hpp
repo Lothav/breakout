@@ -27,12 +27,13 @@ namespace Renderer
     {
     private:
 
+        GLenum texture_count;
         glm::mat4 view_camera;
         std::map<UniformType, UniformData> data;
 
     public:
 
-        Uniform() : view_camera(glm::mat4())
+        Uniform(GLenum texture_count) : view_camera(glm::mat4()), texture_count(texture_count)
         {
             this->data[UNIFORM_TYPE_TEXTURE] = UniformData{.location = "tex", .id = 0};
             this->data[UNIFORM_TYPE_MAT4]    = UniformData{.location = "view", .id = 0};
@@ -50,7 +51,7 @@ namespace Renderer
 
         void  operator delete (void* ptr, std::size_t) {}
 
-        void loadTexture(std::string path);
+        void loadTexture(std::string path, GLenum format);
 
         void setUniform(GLuint shader_program, UniformType type);
 
