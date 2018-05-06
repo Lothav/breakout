@@ -87,12 +87,15 @@ int main(int argc, char* argv[]) {
         auto text_velocity = std::make_unique<Renderer::Text>(-1 + 8 * sx, 1 - 50 * sy-1.8f, sx, sy, face);
         auto text_lives    = std::make_unique<Renderer::Text>(-1 + 8 * sx+1.75f, 1 - 50 * sy-1.8f, sx, sy, face);
 
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 
         auto blocks_texture = std::make_unique<Renderer::Uniform>(1);
         blocks_texture->loadTexture("./data/breakout-blocks-texture.jpg", GL_RGB);
 
         auto paddle_texture = std::make_unique<Renderer::Uniform>(2);
-        paddle_texture->loadTexture("./data/paddle.jpg", GL_RGB);
+        paddle_texture->loadTexture("./data/brown_platform.png", GL_RGBA);
 
         auto ball_texture = std::make_unique<Renderer::Uniform>(3);
         ball_texture->loadTexture("./data/ball.jpg", GL_RGB);
@@ -122,9 +125,6 @@ int main(int argc, char* argv[]) {
             }
         };
         restart();
-
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
         int ball_speed = 0;
         int text_count = 0;

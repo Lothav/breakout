@@ -10,7 +10,7 @@ void Renderer::Uniform::loadTexture(std::string path, GLenum format)
 
     glGenTextures(1, &this->data[ UNIFORM_TYPE_TEXTURE ].id);
     glBindTexture(GL_TEXTURE_2D, this->data[ UNIFORM_TYPE_TEXTURE ].id);
-    glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGB8, surf->w, surf->h);
+    glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, surf->w, surf->h);
     glTexSubImage2D(GL_TEXTURE_2D, 0, 0 ,0, surf->w, surf->h, format, GL_UNSIGNED_BYTE, surf->pixels);
 
     free(surf);
