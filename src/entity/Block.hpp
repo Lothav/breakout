@@ -24,7 +24,7 @@
 #define TEXTURE_UV_OFFSET_Y 0.2f
 
 #define BLOCK_WIDTH  0.16f
-#define BLOCK_HEIGHT 0.1f
+#define BLOCK_HEIGHT 0.12f
 
 namespace Entity
 {

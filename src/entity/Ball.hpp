@@ -15,7 +15,7 @@
 
 #define BALL_SIZE_VERTICES BALL_VERTICES*COORDINATES_BY_VERTEX
 
-#define BALL_WIDTH  0.24f
+#define BALL_WIDTH  0.18f
 #define BALL_HEIGHT 0.24f
 
 namespace Entity
@@ -32,7 +32,6 @@ namespace Entity
 
     public:
         Ball(float x, float y, float speed) : x_(x), y_(y), speed_(speed) {
-            speed_ = 0.005f;
             direction_ = {1.0f, 1.0f};
             vertices_ = {
                     // Triangles                                                          c ___
@@ -60,6 +59,11 @@ namespace Entity
         bool checkObjectCollision(std::array<GLfloat, BALL_SIZE_VERTICES> object);
 
         unsigned int getTotalVertices();
+
+        float getSpeed()
+        {
+            return speed_;
+        }
 
         void increaseSpeed(float plus)
         {

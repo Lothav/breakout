@@ -121,11 +121,12 @@ int main(int argc, char* argv[]) {
             meshes->clear();
             // Init ball, paddle and blocks
             player1 = new Entity::Paddle(0.0f, -0.8f, 0.24f, 0.06f);
-            ball = new Entity::Ball(0.0f, 0.0f, 0.24f);
+            ball = new Entity::Ball(0.0f, 0.0f, 0.005f);
             std::srand(static_cast<unsigned int>(std::time(nullptr)));
             for (int i = 0; i < TOTAL_BLOCKS; i++) {
                 blocks[i] = new Entity::Block(-.8f + BLOCK_WIDTH * (i % 11), 0.8f - BLOCK_HEIGHT * static_cast<float>(floor(i / 11)));
             }
+            pause = true;
         };
         restart();
 
@@ -178,7 +179,7 @@ int main(int argc, char* argv[]) {
 
                 auto player_vertices = player1->getArrayVertices();
                 if(!ball->checkWallCollision()){
-                    ball = new Entity::Ball(0.0f, 0.0f, 0.24f);
+                    ball = new Entity::Ball(0.0f, 0.0f, ball->getSpeed());
                     lives--;
                     if (lives == 0) {
                         restart();
@@ -234,11 +235,13 @@ int main(int argc, char* argv[]) {
             blocks_texture->setUniform(shader->getShaderProgram(), UNIFORM_TYPE_TEXTURE);
             blocks_texture->setUniform(shader->getShaderProgram(), UNIFORM_TYPE_MAT4);
 
+            bool block_hit = false;
             meshes->clear();
             for (int i = 0; i < TOTAL_BLOCKS; ++i) {
                 if (blocks[i]->isAlive()) {
-                    if (ball->checkObjectCollision(blocks[i]->getArrayVertices())) {
+                    if (!block_hit && ball->checkObjectCollision(blocks[i]->getArrayVertices())) {
                         blocks[i]->changeVisibility();
+                        block_hit = true;
                     }
                     meshes->insert(blocks[i]->getVertices(), blocks[i]->getTotalVertices());
                 }
