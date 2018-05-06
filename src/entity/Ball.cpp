@@ -41,18 +41,25 @@ bool Entity::Ball::checkObjectCollision(std::array<GLfloat, BALL_SIZE_VERTICES> 
     auto ballXLeft   = this->vertices_[COORDINATES_BY_VERTEX];
     auto ballYBottom = this->vertices_[COORDINATES_BY_VERTEX+1];
 
-    if (ballXLeft > objectXRight || ballXRight < objectXLeft) {
-        return false;
-    }
+    if (ballXLeft < objectXRight && ballXRight > objectXLeft) {
 
-    if (ballYTop-0.02f > objectYBottom && ballYTop+0.02f < objectYTop) {
-        direction_[1] = -1;
-        return true;
-    }
+        if (ballYTop-0.02f > objectYBottom && ballYTop+0.02f < objectYTop) {
+            if(direction_[1] == -1) {
+                direction_[0] = direction_[0] == 1 ? -1 : 1;
+            } else {
+                direction_[1] = -1;
+            }
+            return true;
+        }
 
-    if (ballYBottom+0.025f < objectYTop && ballYBottom-0.025f > objectYBottom) {
-        direction_[1] = 1;
-        return true;
+        if (ballYBottom+0.025f < objectYTop && ballYBottom-0.025f > objectYBottom) {
+            if(direction_[1] == 1) {
+                direction_[0] = direction_[0] == 1 ? -1 : 1;
+            } else {
+                direction_[1] = 1;
+            }
+            return true;
+        }
     }
 
     return false;
