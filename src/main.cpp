@@ -84,8 +84,9 @@ int main(int argc, char* argv[]) {
         auto text_lives    = std::make_unique<Renderer::Text>(-1 + 8 * sx+1.75f, 1 - 50 * sy-1.8f, sx, sy, face);
 
         auto text_paddle_info = std::make_unique<Renderer::Text>(sx - 0.98f, 1 - 50 * sy-1.0, sx, sy, face);
-        auto text_ball_info   = std::make_unique<Renderer::Text>(sx - 0.98f, 1 - 50 * sy-1.05, sx, sy, face);
-        auto text_ball_vel   = std::make_unique<Renderer::Text>(sx - 0.98f, 1 - 50 * sy-1.1, sx, sy, face);
+        auto text_paddle_vel  = std::make_unique<Renderer::Text>(sx - 0.98f, 1 - 50 * sy-1.05, sx, sy, face);
+        auto text_ball_info   = std::make_unique<Renderer::Text>(sx - 0.98f, 1 - 50 * sy-1.1, sx, sy, face);
+        auto text_ball_vel    = std::make_unique<Renderer::Text>(sx - 0.98f, 1 - 50 * sy-1.15, sx, sy, face);
 
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -194,7 +195,7 @@ int main(int argc, char* argv[]) {
                         restart();
                     }
                 }
-                ball->checkObjectCollision(player_vertices);
+                ball->checkObjectCollision(player_vertices, player1->isMoving() ? std::abs(velocity*100) : 1.0f);
                 ball->moveBall();
             }
 
@@ -248,7 +249,7 @@ int main(int argc, char* argv[]) {
             meshes->clear();
             for (int i = 0; i < TOTAL_BLOCKS; ++i) {
                 if (blocks[i]->isAlive()) {
-                    if (!block_hit && ball->checkObjectCollision(blocks[i]->getArrayVertices())) {
+                    if (!block_hit && ball->checkObjectCollision(blocks[i]->getArrayVertices(), 1.0f)) {
                         blocks[i]->changeVisibility();
                         block_hit = true;
                     }
@@ -310,6 +311,8 @@ int main(int argc, char* argv[]) {
             if (show_info) {
                 text_paddle_info->prepare(24);
                 text_paddle_info->draw("Paddle Pos: (" +  std::to_string(player1->getPos()[0]) + ", "+std::to_string(player1->getPos()[1])+")");
+                text_paddle_vel->prepare(24);
+                text_paddle_vel->draw("Paddle Speed: (" +  std::to_string(velocity)+")");
                 text_ball_info->prepare(24);
                 text_ball_info->draw("Ball Pos: (" +  std::to_string(ball->getPos()[0]) + ", "+std::to_string(ball->getPos()[1])+")");
                 text_ball_vel->prepare(24);

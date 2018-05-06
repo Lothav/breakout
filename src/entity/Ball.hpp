@@ -56,7 +56,7 @@ namespace Entity
 
         bool checkWallCollision();
 
-        bool checkObjectCollision(std::array<GLfloat, BALL_SIZE_VERTICES> object);
+        bool checkObjectCollision(std::array<GLfloat, BALL_SIZE_VERTICES> object, float direction_effect);
 
         unsigned int getTotalVertices();
 

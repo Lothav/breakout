@@ -9,10 +9,13 @@ void Entity::Paddle::move(float x, float y)
     auto playerXWallLeft  = this->vertices[COORDINATES_BY_VERTEX]+x;
 
     if (playerXWallRight <= 1.0f  && playerXWallLeft >= -1.f) {
+        is_moving = true;
         for (int i = 0; i < SIZE_VERTICES; i += COORDINATES_BY_VERTEX)
         {
             this->vertices[i]+=x;
         }
+    } else {
+        is_moving = false;
     }
 }
 

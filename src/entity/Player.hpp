@@ -26,11 +26,13 @@ namespace Entity
         float height;
         float width;
 
+        bool is_moving;
+
         std::array<GLfloat,SIZE_VERTICES>vertices;
 
     public:
 
-        Paddle(float x, float y, float width, float height) : x(x), y(y), height(height), width(width)
+        Paddle(float x, float y, float width, float height) : x(x), y(y), height(height), width(width), is_moving(false)
         {
             vertices = {
                     // Triangles                                            c ___
@@ -63,6 +65,11 @@ namespace Entity
         {
             return {this->vertices[0] - (width/2), this->vertices[1] - (height/2)};
         };
+
+        bool isMoving()
+        {
+            return is_moving;
+        }
     };
 }
 

@@ -29,7 +29,7 @@ bool Entity::Ball::checkWallCollision()
     return true;
 }
 
-bool Entity::Ball::checkObjectCollision(std::array<GLfloat, BALL_SIZE_VERTICES> object)
+bool Entity::Ball::checkObjectCollision(std::array<GLfloat, BALL_SIZE_VERTICES> object, float direction_effect = 1.0f)
 {
     auto objectXRight  = object[0];
     auto objectYTop    = object[1];
@@ -49,6 +49,7 @@ bool Entity::Ball::checkObjectCollision(std::array<GLfloat, BALL_SIZE_VERTICES> 
             } else {
                 direction_[1] = -1;
             }
+            direction_[0] *= direction_effect;
             return true;
         }
 
@@ -58,6 +59,7 @@ bool Entity::Ball::checkObjectCollision(std::array<GLfloat, BALL_SIZE_VERTICES> 
             } else {
                 direction_[1] = 1;
             }
+            direction_[0] *= direction_effect;
             return true;
         }
     }
