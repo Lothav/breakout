@@ -173,6 +173,7 @@ int main(int argc, char* argv[]) {
 
             auto player_vertices = player1->getArrayVertices();
             if(!ball->checkWallCollision()){
+                ball = new Entity::Ball(0.0f, 0.0f, 0.24f);
                 lives--;
                 if (lives == 0) {
                     restart();
