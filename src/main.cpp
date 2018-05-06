@@ -78,8 +78,7 @@ int main(int argc, char* argv[]) {
 
         float velocity = 0;
         int lives = 3;
-        bool pause = false;
-        bool first_frame = true;
+        bool pause = true;
 
         // Init Textures
 
@@ -121,7 +120,6 @@ int main(int argc, char* argv[]) {
             for (int i = 0; i < TOTAL_BLOCKS; i++) {
                 blocks[i] = new Entity::Block(-.8f + BLOCK_WIDTH * (i % 11), 0.8f - BLOCK_HEIGHT * static_cast<float>(floor(i / 11)));
             }
-            first_frame = true;
         };
         restart();
 
@@ -196,14 +194,14 @@ int main(int argc, char* argv[]) {
 
             // Set Background Textures active and Draw
 
-            if (first_frame) {
+            if (pause) {
                 background_texture_2->setUniform(shader->getShaderProgram(), UNIFORM_TYPE_TEXTURE);
                 background_texture_2->setUniform(shader->getShaderProgram(), UNIFORM_TYPE_MAT4);
             } else {
                 if (text_count < 200) {
                     background_texture_0->setUniform(shader->getShaderProgram(), UNIFORM_TYPE_TEXTURE);
                     background_texture_0->setUniform(shader->getShaderProgram(), UNIFORM_TYPE_MAT4);
-                } else if (text_count >= 200) {
+                } else {
                     background_texture_1->setUniform(shader->getShaderProgram(), UNIFORM_TYPE_TEXTURE);
                     background_texture_1->setUniform(shader->getShaderProgram(), UNIFORM_TYPE_MAT4);
                 }
@@ -293,11 +291,6 @@ int main(int argc, char* argv[]) {
             // Adjust FPS
             if (1000/60 > (SDL_GetTicks() - start)) {
                 SDL_Delay(1000/60 - (SDL_GetTicks()-start));
-            }
-
-            if (first_frame) {
-                pause = true;
-                first_frame = false;
             }
 
 #ifdef DEBUG
