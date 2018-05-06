@@ -15,8 +15,8 @@
 
 #define BALL_SIZE_VERTICES BALL_VERTICES*COORDINATES_BY_VERTEX
 
-#define BALL_WIDTH  0.06f
-#define BALL_HEIGHT 0.06f
+#define BALL_WIDTH  0.24f
+#define BALL_HEIGHT 0.24f
 
 namespace Entity
 {

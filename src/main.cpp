@@ -97,16 +97,19 @@ int main(int argc, char* argv[]) {
         auto paddle_texture = std::make_unique<Renderer::Uniform>(2);
         paddle_texture->loadTexture("./data/brown_platform.png", GL_RGBA);
 
-        auto ball_texture = std::make_unique<Renderer::Uniform>(3);
-        ball_texture->loadTexture("./data/ball.jpg", GL_RGB);
+        auto ball_texture_0 = std::make_unique<Renderer::Uniform>(3);
+        ball_texture_0->loadTexture("./data/spike_ball_0.png", GL_RGBA);
 
-        auto background_texture_0 = std::make_unique<Renderer::Uniform>(4);
+        auto ball_texture_1 = std::make_unique<Renderer::Uniform>(4);
+        ball_texture_1->loadTexture("./data/spike_ball_1.png", GL_RGBA);
+
+        auto background_texture_0 = std::make_unique<Renderer::Uniform>(5);
         background_texture_0->loadTexture("./data/forest_background_0.png", GL_RGB);
 
-        auto background_texture_1 = std::make_unique<Renderer::Uniform>(5);
+        auto background_texture_1 = std::make_unique<Renderer::Uniform>(6);
         background_texture_1->loadTexture("./data/forest_background_1.png", GL_RGB);
 
-        auto background_texture_2 = std::make_unique<Renderer::Uniform>(6);
+        auto background_texture_2 = std::make_unique<Renderer::Uniform>(7);
         background_texture_2->loadTexture("./data/forest_background_2.png", GL_RGB);
 
 
@@ -205,10 +208,7 @@ int main(int argc, char* argv[]) {
                     background_texture_1->setUniform(shader->getShaderProgram(), UNIFORM_TYPE_TEXTURE);
                     background_texture_1->setUniform(shader->getShaderProgram(), UNIFORM_TYPE_MAT4);
                 }
-                if(text_count >= 400){
-                    text_count = 0;
-                }
-                text_count++;
+
             }
 
             std::vector<GLfloat> background_vertices_ = {
@@ -264,8 +264,19 @@ int main(int argc, char* argv[]) {
 
             // Set Ball Textures active and Draw
 
-            ball_texture->setUniform(shader->getShaderProgram(), UNIFORM_TYPE_TEXTURE);
-            ball_texture->setUniform(shader->getShaderProgram(), UNIFORM_TYPE_MAT4);
+            if (pause) {
+                ball_texture_0->setUniform(shader->getShaderProgram(), UNIFORM_TYPE_TEXTURE);
+                ball_texture_0->setUniform(shader->getShaderProgram(), UNIFORM_TYPE_MAT4);
+
+            } else {
+                if (text_count <= 200) {
+                    ball_texture_0->setUniform(shader->getShaderProgram(), UNIFORM_TYPE_TEXTURE);
+                    ball_texture_0->setUniform(shader->getShaderProgram(), UNIFORM_TYPE_MAT4);
+                } else {
+                    ball_texture_1->setUniform(shader->getShaderProgram(), UNIFORM_TYPE_TEXTURE);
+                    ball_texture_1->setUniform(shader->getShaderProgram(), UNIFORM_TYPE_MAT4);
+                }
+            }
 
             meshes->clear();
             meshes->insert(ball->getVertices(), ball->getTotalVertices());
@@ -287,6 +298,11 @@ int main(int argc, char* argv[]) {
 
             // Swap Window
             SDL_GL_SwapWindow(SDL_window);
+
+            text_count++;
+            if(text_count >= 400){
+                text_count = 0;
+            }
 
             // Adjust FPS
             if (1000/60 > (SDL_GetTicks() - start)) {
