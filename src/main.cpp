@@ -30,7 +30,7 @@ int main(int argc, char* argv[]) {
         return EXIT_FAILURE;
     }
 
-    if (IMG_Init(IMG_INIT_JPG) == 0) {
+    if (IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG) == 0) {
         std::cerr << "Could not initialize IMG's flags" << std::endl;
         return EXIT_FAILURE;
     }
@@ -67,11 +67,6 @@ int main(int argc, char* argv[]) {
             return EXIT_FAILURE;
         }
 
-        float sx = 2.0f / SCREEN_WIDTH;
-        float sy = 2.0f / SCREEN_HEIGHT;
-        auto text_velocity = std::make_unique<Renderer::Text>(-1 + 8 * sx, 1 - 50 * sy-1.8f, sx, sy, face);
-        auto text_lives    = std::make_unique<Renderer::Text>(-1 + 8 * sx+1.75f, 1 - 50 * sy-1.8f, sx, sy, face);
-
         auto shader = std::make_unique<Renderer::Shader>();
         shader->createGraphicShader(GL_VERTEX_SHADER, "default.vert");
         shader->createGraphicShader(GL_FRAGMENT_SHADER, "default.frag");
@@ -88,14 +83,30 @@ int main(int argc, char* argv[]) {
 
         // Init Textures
 
-        auto blocks_texture = std::make_unique<Renderer::Uniform>(0);
+        float sx = 2.0f / SCREEN_WIDTH;
+        float sy = 2.0f / SCREEN_HEIGHT;
+        auto text_velocity = std::make_unique<Renderer::Text>(-1 + 8 * sx, 1 - 50 * sy-1.8f, sx, sy, face);
+        auto text_lives    = std::make_unique<Renderer::Text>(-1 + 8 * sx+1.75f, 1 - 50 * sy-1.8f, sx, sy, face);
+
+
+        auto blocks_texture = std::make_unique<Renderer::Uniform>(1);
         blocks_texture->loadTexture("./data/breakout-blocks-texture.jpg", GL_RGB);
 
-        auto paddle_texture = std::make_unique<Renderer::Uniform>(1);
+        auto paddle_texture = std::make_unique<Renderer::Uniform>(2);
         paddle_texture->loadTexture("./data/paddle.jpg", GL_RGB);
 
-        auto ball_texture = std::make_unique<Renderer::Uniform>(2);
+        auto ball_texture = std::make_unique<Renderer::Uniform>(3);
         ball_texture->loadTexture("./data/ball.jpg", GL_RGB);
+
+        auto background_texture_0 = std::make_unique<Renderer::Uniform>(4);
+        background_texture_0->loadTexture("./data/forest_background_0.png", GL_RGB);
+
+        auto background_texture_1 = std::make_unique<Renderer::Uniform>(5);
+        background_texture_1->loadTexture("./data/forest_background_1.png", GL_RGB);
+
+        auto background_texture_2 = std::make_unique<Renderer::Uniform>(6);
+        background_texture_2->loadTexture("./data/forest_background_2.png", GL_RGB);
+
 
         Entity::Paddle* player1 = nullptr;
         Entity::Ball* ball = nullptr;
@@ -118,6 +129,7 @@ int main(int argc, char* argv[]) {
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
         int ball_speed = 0;
+        int text_count = 0;
         // Main Loop
         auto loop = [&]() -> bool {
 
@@ -183,6 +195,39 @@ int main(int argc, char* argv[]) {
             ball->moveBall();
 
 
+            // Set Background Textures active and Draw
+
+            if (text_count < 200) {
+                background_texture_0->setUniform(shader->getShaderProgram(), UNIFORM_TYPE_TEXTURE);
+                background_texture_0->setUniform(shader->getShaderProgram(), UNIFORM_TYPE_MAT4);
+            } else
+            if (text_count >= 200) {
+                background_texture_1->setUniform(shader->getShaderProgram(), UNIFORM_TYPE_TEXTURE);
+                background_texture_1->setUniform(shader->getShaderProgram(), UNIFORM_TYPE_MAT4);
+            }
+            if(text_count >= 400){
+                text_count = 0;
+            }
+            text_count++;
+
+            std::vector<GLfloat> background_vertices_ = {
+                    // Triangles                    //     c ___
+                     1.0f,  1.0f, 0.0f, 1.0f, 0.0f, // a    |  /a
+                    -1.0f, -1.0f, 0.0f, 0.0f, 1.0f, // b    | /
+                    -1.0f,  1.0f, 0.0f, 0.0f, 0.0f, // c   b|/
+                     1.0f,  1.0f, 0.0f, 1.0f, 0.0f, // d       /|d
+                    -1.0f, -1.0f, 0.0f, 0.0f, 1.0f, // e      / |
+                     1.0f, -1.0f, 0.0f, 1.0f, 1.0f, // f    e/__|f
+            };
+
+            meshes->clear();
+            meshes->insert(background_vertices_.data(), ball->getTotalVertices());
+
+            vertex->setBufferData(meshes->getByteSize(), meshes->get());
+            auto count_meshes = static_cast<GLsizei>(meshes->getSize());
+            glDrawArrays(GL_TRIANGLES, 0, count_meshes);
+
+
             // Set Block Textures active and Draw
 
             blocks_texture->setUniform(shader->getShaderProgram(), UNIFORM_TYPE_TEXTURE);
@@ -199,7 +244,7 @@ int main(int argc, char* argv[]) {
             }
 
             vertex->setBufferData(meshes->getByteSize(), meshes->get());
-            auto count_meshes = static_cast<GLsizei>(meshes->getSize());
+            count_meshes = static_cast<GLsizei>(meshes->getSize());
             glDrawArrays(GL_TRIANGLES, 0, count_meshes);
 
 
@@ -228,6 +273,9 @@ int main(int argc, char* argv[]) {
             count_meshes = static_cast<GLsizei>(meshes->getSize());
             glDrawArrays(GL_TRIANGLES, 0, count_meshes);
 
+
+            // Set/Prepare Text and Draw
+
             std::string text_velocity_str = "Velocity: " + std::to_string(static_cast<int>((velocity*10000) / 4)) + "%";
             text_velocity->prepare(32);
             text_velocity->draw(text_velocity_str);
@@ -235,11 +283,6 @@ int main(int argc, char* argv[]) {
             std::string text_lives_str = "Lives: " + std::to_string(lives);
             text_lives->prepare(32);
             text_lives->draw(text_lives_str);
-
-            //render_text("The Quick Brown Fox Jumps Over The Lazy Dog",
-            //            -1 + 8 * sx,   1 - 50 * sy,    sx, sy);
-            //render_text("The Misaligned Fox Jumps Over The Lazy Dog",
-            //            -1 + 8.5 * sx, 1 - 100.5 * sy, sx, sy);
 
             // Swap Window
             SDL_GL_SwapWindow(SDL_window);

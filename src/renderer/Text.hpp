@@ -70,10 +70,10 @@ namespace Renderer {
             /* Create a texture that will be used to hold one "glyph" */
             GLuint tex;
 
-            glActiveTexture(GL_TEXTURE3);
+            glActiveTexture(GL_TEXTURE0);
             glGenTextures(1, &tex);
             glBindTexture(GL_TEXTURE_2D, tex);
-            glUniform1i(uniform_tex_, 3);
+            glUniform1i(uniform_tex_, 0);
 
             /* We require 1 byte alignment when uploading texture data */
             glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
