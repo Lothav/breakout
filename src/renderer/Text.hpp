@@ -53,19 +53,18 @@ namespace Renderer {
             glGenBuffers(1, &vbo);
         }
 
-        void prepare()
+        void prepare(FT_UInt font_size=48)
         {
             shader->use();
             GLfloat black[4] = { 1, 1, 1, 1 };
 
             /* Set font size to 48 pixels, color to black */
-            FT_Set_Pixel_Sizes(font_face_, 0, 48);
+            FT_Set_Pixel_Sizes(font_face_, 0, font_size);
             glUniform4fv(uniform_color_, 1, black);
         }
 
-        void draw(const char *text)
+        void draw(std::string text)
         {
-            const char *p;
             FT_GlyphSlot g = this->font_face_->glyph;
 
             /* Create a texture that will be used to hold one "glyph" */
@@ -96,9 +95,9 @@ namespace Renderer {
             auto y_tmp = y_;
 
             /* Loop through all characters */
-            for (p = text; *p; p++) {
+            for (int i = 0; i < text.size(); i++) {
                 /* Try to load and render the character */
-                if (FT_Load_Char(this->font_face_, *p, FT_LOAD_RENDER))
+                if (FT_Load_Char(this->font_face_, text[i], FT_LOAD_RENDER))
                     continue;
 
                 /* Upload the "bitmap", which contains an 8-bit grayscale image, as an alpha texture */

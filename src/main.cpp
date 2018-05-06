@@ -69,8 +69,7 @@ int main(int argc, char* argv[]) {
 
         float sx = 2.0f / SCREEN_WIDTH;
         float sy = 2.0f / SCREEN_HEIGHT;
-
-        auto text = std::make_unique<Renderer::Text>(-1 + 8.5 * sx, 1 - 100.5 * sy, sx, sy, face);
+        auto text_velocity = std::make_unique<Renderer::Text>(-1 + 8 * sx, 1 - 50 * sy-1.8f, sx, sy, face);
 
         auto shader = std::make_unique<Renderer::Shader>();
         shader->createGraphicShader(GL_VERTEX_SHADER, "default.vert");
@@ -223,8 +222,9 @@ int main(int argc, char* argv[]) {
             count_meshes = static_cast<GLsizei>(meshes->getSize());
             glDrawArrays(GL_TRIANGLES, 0, count_meshes);
 
-            text->prepare();
-            text->draw("The Quick Brown Fox Jumps Over The Lazy Dog");
+            std::string text_velocity_str = "Velocity: " + std::to_string(static_cast<int>((velocity*10000) / 4)) + "%";
+            text_velocity->prepare(32);
+            text_velocity->draw(text_velocity_str);
 
             //render_text("The Quick Brown Fox Jumps Over The Lazy Dog",
             //            -1 + 8 * sx,   1 - 50 * sy,    sx, sy);
