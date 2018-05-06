@@ -30,4 +30,7 @@ add_executable(
         src/entity/Ball.cpp
         src/entity/Ball.hpp
 )
-target_link_libraries(launcher SDL2 SDL2_image GL GLEW)
+
+include_directories(/usr/include/freetype2)
+
+target_link_libraries(launcher SDL2 SDL2_image GL GLEW freetype)

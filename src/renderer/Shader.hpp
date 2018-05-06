@@ -41,7 +41,9 @@ namespace Renderer {
 
         GLuint getShaderProgram();
 
-        void beginProgram();
+        void link();
+
+        void use();
 
     private:
 

@@ -19,10 +19,15 @@ GLuint Renderer::Shader::getShaderProgram()
     return this->shaderProgram;
 }
 
-void Renderer::Shader::beginProgram()
+
+void Renderer::Shader::use()
+{
+    glUseProgram(this->shaderProgram);
+}
+
+void Renderer::Shader::link()
 {
     glLinkProgram(this->shaderProgram);
-    glUseProgram(this->shaderProgram);
 }
 
 void Renderer::Shader::compileShader(GLuint shader)
