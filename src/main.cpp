@@ -164,51 +164,54 @@ int main(int argc, char* argv[]) {
                     }
                 }
             }
-            if (pause) {
-                return true;
-            }
 
-            ball_speed++;
-            if(ball_speed % 250 == 0) {
-                ball->increaseSpeed(0.001f);
-                ball_speed = 0;
-            }
+            if (!pause) {
 
-            auto vertex = std::make_unique<Renderer::Vertex>(shader->getShaderProgram());
-            shader->use();
+                ball_speed++;
+                if(ball_speed % 250 == 0) {
+                    ball->increaseSpeed(0.001f);
+                    ball_speed = 0;
+                }
+
+                player1->move(velocity, .0f);
+
+                auto player_vertices = player1->getArrayVertices();
+                if(!ball->checkWallCollision()){
+                    ball = new Entity::Ball(0.0f, 0.0f, 0.24f);
+                    lives--;
+                    if (lives == 0) {
+                        restart();
+                    }
+                }
+                ball->checkObjectCollision(player_vertices);
+                ball->moveBall();
+            }
 
             // Set screen to black
             glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT);
 
-            player1->move(velocity, .0f);
-
-            auto player_vertices = player1->getArrayVertices();
-            if(!ball->checkWallCollision()){
-                ball = new Entity::Ball(0.0f, 0.0f, 0.24f);
-                lives--;
-                if (lives == 0) {
-                    restart();
-                }
-            }
-            ball->checkObjectCollision(player_vertices);
-            ball->moveBall();
-
+            auto vertex = std::make_unique<Renderer::Vertex>(shader->getShaderProgram());
+            shader->use();
 
             // Set Background Textures active and Draw
 
-            if (text_count < 200) {
-                background_texture_0->setUniform(shader->getShaderProgram(), UNIFORM_TYPE_TEXTURE);
-                background_texture_0->setUniform(shader->getShaderProgram(), UNIFORM_TYPE_MAT4);
-            } else
-            if (text_count >= 200) {
-                background_texture_1->setUniform(shader->getShaderProgram(), UNIFORM_TYPE_TEXTURE);
-                background_texture_1->setUniform(shader->getShaderProgram(), UNIFORM_TYPE_MAT4);
+            if (first_frame) {
+                background_texture_2->setUniform(shader->getShaderProgram(), UNIFORM_TYPE_TEXTURE);
+                background_texture_2->setUniform(shader->getShaderProgram(), UNIFORM_TYPE_MAT4);
+            } else {
+                if (text_count < 200) {
+                    background_texture_0->setUniform(shader->getShaderProgram(), UNIFORM_TYPE_TEXTURE);
+                    background_texture_0->setUniform(shader->getShaderProgram(), UNIFORM_TYPE_MAT4);
+                } else if (text_count >= 200) {
+                    background_texture_1->setUniform(shader->getShaderProgram(), UNIFORM_TYPE_TEXTURE);
+                    background_texture_1->setUniform(shader->getShaderProgram(), UNIFORM_TYPE_MAT4);
+                }
+                if(text_count >= 400){
+                    text_count = 0;
+                }
+                text_count++;
             }
-            if(text_count >= 400){
-                text_count = 0;
-            }
-            text_count++;
 
             std::vector<GLfloat> background_vertices_ = {
                     // Triangles                    //     c ___
