@@ -126,6 +126,7 @@ int main(int argc, char* argv[]) {
             for (int i = 0; i < TOTAL_BLOCKS; i++) {
                 blocks[i] = new Entity::Block(-.8f + BLOCK_WIDTH * (i % 11), 0.8f - BLOCK_HEIGHT * static_cast<float>(floor(i / 11)));
             }
+            lives = 3;
             pause = true;
         };
         restart();
