@@ -29,7 +29,7 @@ add_executable(
         src/entity/Block.hpp
         src/entity/Ball.cpp
         src/entity/Ball.hpp
-)
+        src/renderer/Text.cpp src/renderer/Text.hpp)
 
 include_directories(/usr/include/freetype2)
 
