@@ -70,6 +70,7 @@ int main(int argc, char* argv[]) {
         float sx = 2.0f / SCREEN_WIDTH;
         float sy = 2.0f / SCREEN_HEIGHT;
         auto text_velocity = std::make_unique<Renderer::Text>(-1 + 8 * sx, 1 - 50 * sy-1.8f, sx, sy, face);
+        auto text_lives    = std::make_unique<Renderer::Text>(-1 + 8 * sx+1.75f, 1 - 50 * sy-1.8f, sx, sy, face);
 
         auto shader = std::make_unique<Renderer::Shader>();
         shader->createGraphicShader(GL_VERTEX_SHADER, "default.vert");
@@ -81,6 +82,7 @@ int main(int argc, char* argv[]) {
         auto *SDL_window = window->getWindow();
 
         float velocity = 0;
+        int lives = 3;
         bool pause = false;
         bool first_frame = true;
 
@@ -171,7 +173,10 @@ int main(int argc, char* argv[]) {
 
             auto player_vertices = player1->getArrayVertices();
             if(!ball->checkWallCollision()){
-                restart();
+                lives--;
+                if (lives == 0) {
+                    restart();
+                }
             }
             ball->checkObjectCollision(player_vertices);
             ball->moveBall();
@@ -225,6 +230,10 @@ int main(int argc, char* argv[]) {
             std::string text_velocity_str = "Velocity: " + std::to_string(static_cast<int>((velocity*10000) / 4)) + "%";
             text_velocity->prepare(32);
             text_velocity->draw(text_velocity_str);
+
+            std::string text_lives_str = "Lives: " + std::to_string(lives);
+            text_lives->prepare(32);
+            text_lives->draw(text_lives_str);
 
             //render_text("The Quick Brown Fox Jumps Over The Lazy Dog",
             //            -1 + 8 * sx,   1 - 50 * sy,    sx, sy);
