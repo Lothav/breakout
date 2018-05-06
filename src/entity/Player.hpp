@@ -58,6 +58,11 @@ namespace Entity
         unsigned int getTotalVertices();
 
         void move(float x, float y);
+
+        std::array<GLfloat, 2> getPos()
+        {
+            return {this->vertices[0] - (width/2), this->vertices[1] - (height/2)};
+        };
     };
 }
 

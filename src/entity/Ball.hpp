@@ -72,6 +72,11 @@ namespace Entity
 
         GLfloat* getVertices();
 
+        std::array<GLfloat, 2> getPos()
+        {
+            return {this->vertices_[0] - (BALL_WIDTH/2), this->vertices_[1] - (BALL_HEIGHT/2)};
+        };
+
     };
 }
 #endif //BREAKOUT_BALL_HPP

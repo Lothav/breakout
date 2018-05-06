@@ -76,10 +76,6 @@ int main(int argc, char* argv[]) {
 
         auto *SDL_window = window->getWindow();
 
-        float velocity = 0;
-        int lives = 3;
-        bool pause = true;
-
         // Init Textures
 
         float sx = 2.0f / SCREEN_WIDTH;
@@ -87,9 +83,12 @@ int main(int argc, char* argv[]) {
         auto text_velocity = std::make_unique<Renderer::Text>(-1 + 8 * sx, 1 - 50 * sy-1.8f, sx, sy, face);
         auto text_lives    = std::make_unique<Renderer::Text>(-1 + 8 * sx+1.75f, 1 - 50 * sy-1.8f, sx, sy, face);
 
+        auto text_paddle_info = std::make_unique<Renderer::Text>(sx - 0.98f, 1 - 50 * sy-1.0, sx, sy, face);
+        auto text_ball_info   = std::make_unique<Renderer::Text>(sx - 0.98f, 1 - 50 * sy-1.05, sx, sy, face);
+        auto text_ball_vel   = std::make_unique<Renderer::Text>(sx - 0.98f, 1 - 50 * sy-1.1, sx, sy, face);
+
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
 
         auto blocks_texture = std::make_unique<Renderer::Uniform>(1);
         blocks_texture->loadTexture("./data/breakout-blocks-texture.jpg", GL_RGB);
@@ -117,6 +116,11 @@ int main(int argc, char* argv[]) {
         Entity::Ball* ball = nullptr;
         Entity::Block* blocks[TOTAL_BLOCKS];
 
+        float velocity = 0;
+        int lives = 3;
+        bool pause = true;
+        bool show_info = false;
+
         auto restart = [&]() {
             meshes->clear();
             // Init ball, paddle and blocks
@@ -128,6 +132,7 @@ int main(int argc, char* argv[]) {
             }
             lives = 3;
             pause = true;
+            show_info = false;
         };
         restart();
 
@@ -164,12 +169,15 @@ int main(int argc, char* argv[]) {
                 if(e.type == SDL_MOUSEBUTTONDOWN) {
                     if (e.button.button == SDL_BUTTON_LEFT) {
                         pause = !pause;
+                        show_info = false;
+                    } else if (e.button.button == SDL_BUTTON_RIGHT) {
+                        pause = !pause;
+                        show_info = true;
                     }
                 }
             }
 
             if (!pause) {
-
                 ball_speed++;
                 if(ball_speed % 250 == 0) {
                     ball->increaseSpeed(0.001f);
@@ -271,7 +279,6 @@ int main(int argc, char* argv[]) {
             if (pause) {
                 ball_texture_0->setUniform(shader->getShaderProgram(), UNIFORM_TYPE_TEXTURE);
                 ball_texture_0->setUniform(shader->getShaderProgram(), UNIFORM_TYPE_MAT4);
-
             } else {
                 if (text_count <= 200) {
                     ball_texture_0->setUniform(shader->getShaderProgram(), UNIFORM_TYPE_TEXTURE);
@@ -299,6 +306,16 @@ int main(int argc, char* argv[]) {
             std::string text_lives_str = "Lives: " + std::to_string(lives);
             text_lives->prepare(32);
             text_lives->draw(text_lives_str);
+
+            if (show_info) {
+                text_paddle_info->prepare(24);
+                text_paddle_info->draw("Paddle Pos: (" +  std::to_string(player1->getPos()[0]) + ", "+std::to_string(player1->getPos()[1])+")");
+                text_ball_info->prepare(24);
+                text_ball_info->draw("Ball Pos: (" +  std::to_string(ball->getPos()[0]) + ", "+std::to_string(ball->getPos()[1])+")");
+                text_ball_vel->prepare(24);
+                text_ball_vel->draw("Ball Speed: (" +  std::to_string(ball->getSpeed()) + ")");
+                pause = true;
+            }
 
             // Swap Window
             SDL_GL_SwapWindow(SDL_window);
