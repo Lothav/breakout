@@ -83,10 +83,11 @@ int main(int argc, char* argv[]) {
         auto text_velocity = std::make_unique<Renderer::Text>(-1 + 8 * sx, 1 - 50 * sy-1.8f, sx, sy, face);
         auto text_lives    = std::make_unique<Renderer::Text>(-1 + 8 * sx+1.75f, 1 - 50 * sy-1.8f, sx, sy, face);
 
-        auto text_paddle_info = std::make_unique<Renderer::Text>(sx - 0.98f, 1 - 50 * sy-1.0, sx, sy, face);
-        auto text_paddle_vel  = std::make_unique<Renderer::Text>(sx - 0.98f, 1 - 50 * sy-1.05, sx, sy, face);
-        auto text_ball_info   = std::make_unique<Renderer::Text>(sx - 0.98f, 1 - 50 * sy-1.1, sx, sy, face);
-        auto text_ball_vel    = std::make_unique<Renderer::Text>(sx - 0.98f, 1 - 50 * sy-1.15, sx, sy, face);
+        auto text_paddle_info  = std::make_unique<Renderer::Text>(sx - 0.98f, 1 - 50 * sy-1.0, sx, sy, face);
+        auto text_paddle_vel   = std::make_unique<Renderer::Text>(sx - 0.98f, 1 - 50 * sy-1.05, sx, sy, face);
+        auto text_ball_info    = std::make_unique<Renderer::Text>(sx - 0.98f, 1 - 50 * sy-1.1, sx, sy, face);
+        auto text_ball_vel     = std::make_unique<Renderer::Text>(sx - 0.98f, 1 - 50 * sy-1.15, sx, sy, face);
+        auto text_count_blocks = std::make_unique<Renderer::Text>(sx - 0.98f, 1 - 50 * sy-1.2, sx, sy, face);
 
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -317,6 +318,16 @@ int main(int argc, char* argv[]) {
                 text_ball_info->draw("Ball Pos: (" +  std::to_string(ball->getPos()[0]) + ", "+std::to_string(ball->getPos()[1])+")");
                 text_ball_vel->prepare(24);
                 text_ball_vel->draw("Ball Speed: (" +  std::to_string(ball->getSpeed()) + ")");
+
+                int blocks_alive_count = 0;
+                for (int i = 0; i < TOTAL_BLOCKS; ++i) {
+                    if (blocks[i]->isAlive()) {
+                        blocks_alive_count++;
+                    }
+                }
+                text_count_blocks->prepare(24);
+                text_count_blocks->draw("Blocks Remaining: (" +  std::to_string(blocks_alive_count) + ")");
+
                 pause = true;
             }
 
