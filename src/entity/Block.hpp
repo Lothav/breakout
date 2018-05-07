@@ -36,15 +36,15 @@ namespace Entity
         float y_;
 
         bool shown_;
+        bool special_;
 
         std::array<int, 2> texture_index_;
         std::array<GLfloat, BLOCK_SIZE_VERTICES> vertices_;
 
     public:
 
-        Block(float x, float y) : x_(x), y_(y), shown_(true)
+        Block(float x, float y) : x_(x), y_(y), shown_(true), special_(false)
         {
-            texture_index_[0] = std::rand() % BLOCK_TEXTURE_MAX_X;
             std::map<
                 char,
                 std::array<GLfloat, 2>,
@@ -54,6 +54,10 @@ namespace Entity
 
             texture_index_[0] = std::rand() % BLOCK_TEXTURE_MAX_X;
             texture_index_[1] = std::rand() % BLOCK_TEXTURE_MAX_Y;
+
+            if(texture_index_[0] == 1 && texture_index_[1] == 4) {
+                special_ = true;
+            }
 
             uv['a'] = {TEXTURE_UV_OFFSET_X + texture_index_[0]*TEXTURE_UV_OFFSET_X, texture_index_[1]*TEXTURE_UV_OFFSET_Y};
             uv['b'] = {texture_index_[0]*TEXTURE_UV_OFFSET_X, TEXTURE_UV_OFFSET_Y + texture_index_[1]*TEXTURE_UV_OFFSET_Y};
@@ -95,6 +99,11 @@ namespace Entity
         bool isAlive()
         {
             return shown_;
+        }
+
+        bool isSpecial()
+        {
+            return special_;
         }
 
         GLfloat* getVertices();

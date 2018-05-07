@@ -253,6 +253,9 @@ int main(int argc, char* argv[]) {
                     if (!block_hit && ball->checkObjectCollision(blocks[i]->getArrayVertices(), 1.0f)) {
                         blocks[i]->changeVisibility();
                         block_hit = true;
+                        if (blocks[i]->isSpecial()) {
+                            player1 = new Entity::Paddle(player1->getPos()[0], -0.8f, 0.44f, 0.06f);
+                        }
                     }
                     meshes->insert(blocks[i]->getVertices(), blocks[i]->getTotalVertices());
                 }
