@@ -31,9 +31,9 @@ namespace Renderer {
 
         GLuint vbo;
 
-        GLint uniform_tex_;
-        GLint attribute_coord_;
-        GLint uniform_color_;
+        GLuint uniform_tex_;
+        GLuint attribute_coord_;
+        GLuint uniform_color_;
 
         Renderer::Shader* shader;
 
@@ -46,9 +46,25 @@ namespace Renderer {
             shader->createGraphicShader(GL_FRAGMENT_SHADER, "text.frag");
             shader->link();
 
-            this->uniform_tex_     = glGetUniformLocation(shader->getShaderProgram(), "tex");
-            this->attribute_coord_ = glGetAttribLocation(shader->getShaderProgram(), "coord");
-            this->uniform_color_   = glGetUniformLocation(shader->getShaderProgram(), "color");
+            GLint loc;
+
+            loc = glGetUniformLocation(shader->getShaderProgram(), "tex");
+            if (loc < 0) {
+                std::cerr << "Can't find 'tex' uniform on shader!" << std::endl;
+            }
+            this->uniform_tex_ = static_cast<GLuint>(loc);
+
+            loc = glGetAttribLocation(shader->getShaderProgram(), "coord");
+            if (loc < 0) {
+                std::cerr << "Can't find 'coord' attr on shader!" << std::endl;
+            }
+            this->attribute_coord_ = static_cast<GLuint>(loc);
+
+            loc = glGetUniformLocation(shader->getShaderProgram(), "color");
+            if (loc < 0) {
+                std::cerr << "Can't find 'color' uniform on shader!" << std::endl;
+            }
+            this->uniform_color_ = static_cast<GLuint>(loc);
 
             glGenBuffers(1, &vbo);
         }
