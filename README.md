@@ -1,5 +1,6 @@
 # Breakout
 
+![Alt Text](https://github.com/Luiz0tavio/breakout/blob/master/bin/data/breakout_gif.gif)
 
 
 ### Dependencies
