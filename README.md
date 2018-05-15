@@ -27,10 +27,10 @@ $ ./breakout
 
 mouse : paddle movement
 
-q : quit
+**q** : quit
 
-r : restart
+**r** : restart
 
-left click : pause
+**left click** : pause
 
-right click : debug
+**right click** : debug
