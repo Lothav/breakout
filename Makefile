@@ -1,5 +1,6 @@
 TARGET = ./bin/breakout
-LIBS = -lSDL2 -lSDL2_image -lGL -lGLEW
+LIBS = -lSDL2 -lSDL2_image -lGL -lGLEW -lfreetype
+DEPS = -I/usr/include/freetype2
 CC = g++
 
 .PHONY: default all clean
@@ -16,7 +17,7 @@ HEADERS = $(wildcard src/**/*.hpp)
 .PRECIOUS: $(TARGET) $(OBJECTS)
 
 $(TARGET): $(OBJECTS)
-	$(CC) $(OBJECTS) $(LIBS) -o $@
+	$(CC) $(OBJECTS) $(DEPS) $(LIBS) -o $@
 
 clean:
 	-rm -f *.o

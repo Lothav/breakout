@@ -6,11 +6,11 @@
 #define BREAKOUT_BLOCK_HPP
 
 #include <array>
-#include <GL/gl.h>
 #include <ctime>
 #include "../memory/Pool.hpp"
 #include "../memory/Provider.hpp"
 #include "../memory/Allocator.hpp"
+#include <GL/gl.h>
 
 #define BLOCK_COORDINATES_BY_VERTEX 5   // 5 coords each (x, y, z, u, v)
 #define BLOCK_VERTICES 6                // 6 points (two triangles

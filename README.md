@@ -1,2 +1,35 @@
-# breakout
-My version of the arcade game developed and published by Atari, Inc., released on May 13, 1976.
+# Breakout
+
+
+
+### Dependencies
+
+Linux OS based.
+
+Libs:
+- SDL2
+- SDL2_image
+- GL
+- GLEW
+- freetype2
+
+### Running
+
+```
+$ make
+$ cd bin
+$ ./breakout
+```
+
+### Gameplay
+
+
+mouse : paddle movement
+
+q : quit
+
+r : restart
+
+left click : pause
+
+right click : debug

@@ -49,7 +49,6 @@ int main(int argc, char* argv[]) {
 
     FT_Set_Pixel_Sizes(face, 0, 48);
 
-
     // Unique Ptr's scope
     {
         auto window = std::make_unique<Renderer::Window>(SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -80,9 +79,8 @@ int main(int argc, char* argv[]) {
 
         float sx = 2.0f / SCREEN_WIDTH;
         float sy = 2.0f / SCREEN_HEIGHT;
-        auto text_velocity = std::make_unique<Renderer::Text>(-1 + 8 * sx, 1 - 50 * sy-1.8f, sx, sy, face);
-        auto text_lives    = std::make_unique<Renderer::Text>(-1 + 8 * sx+1.75f, 1 - 50 * sy-1.8f, sx, sy, face);
-
+        auto text_velocity     = std::make_unique<Renderer::Text>(-1 + 8 * sx, 1 - 50 * sy-1.8f, sx, sy, face);
+        auto text_lives        = std::make_unique<Renderer::Text>(-1 + 8 * sx+1.75f, 1 - 50 * sy-1.8f, sx, sy, face);
         auto text_paddle_info  = std::make_unique<Renderer::Text>(sx - 0.98f, 1 - 50 * sy-1.0, sx, sy, face);
         auto text_paddle_vel   = std::make_unique<Renderer::Text>(sx - 0.98f, 1 - 50 * sy-1.05, sx, sy, face);
         auto text_ball_info    = std::make_unique<Renderer::Text>(sx - 0.98f, 1 - 50 * sy-1.1, sx, sy, face);
@@ -92,25 +90,26 @@ int main(int argc, char* argv[]) {
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-        auto blocks_texture = std::make_unique<Renderer::Uniform>(1);
+        int uniform_id = 0;
+        auto blocks_texture = std::make_unique<Renderer::Uniform>(++uniform_id);
         blocks_texture->loadTexture("./data/breakout-blocks-texture.jpg", GL_RGB);
 
-        auto paddle_texture = std::make_unique<Renderer::Uniform>(2);
+        auto paddle_texture = std::make_unique<Renderer::Uniform>(++uniform_id);
         paddle_texture->loadTexture("./data/brown_platform.png", GL_RGBA);
 
-        auto ball_texture_0 = std::make_unique<Renderer::Uniform>(3);
+        auto ball_texture_0 = std::make_unique<Renderer::Uniform>(++uniform_id);
         ball_texture_0->loadTexture("./data/spike_ball_0.png", GL_RGBA);
 
-        auto ball_texture_1 = std::make_unique<Renderer::Uniform>(4);
+        auto ball_texture_1 = std::make_unique<Renderer::Uniform>(++uniform_id);
         ball_texture_1->loadTexture("./data/spike_ball_1.png", GL_RGBA);
 
-        auto background_texture_0 = std::make_unique<Renderer::Uniform>(5);
+        auto background_texture_0 = std::make_unique<Renderer::Uniform>(++uniform_id);
         background_texture_0->loadTexture("./data/forest_background_0.png", GL_RGB);
 
-        auto background_texture_1 = std::make_unique<Renderer::Uniform>(6);
+        auto background_texture_1 = std::make_unique<Renderer::Uniform>(++uniform_id);
         background_texture_1->loadTexture("./data/forest_background_1.png", GL_RGB);
 
-        auto background_texture_2 = std::make_unique<Renderer::Uniform>(7);
+        auto background_texture_2 = std::make_unique<Renderer::Uniform>(++uniform_id);
         background_texture_2->loadTexture("./data/forest_background_2.png", GL_RGB);
 
 
