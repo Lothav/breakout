@@ -33,4 +33,4 @@ mouse : paddle movement
 
 **left click** : pause
 
-**right click** : debug
+**right click** : frame debug
