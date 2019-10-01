@@ -1,5 +1,6 @@
 #include <functional>
 #include <memory>
+#include <iostream>
 
 #include "renderer/Window.hpp"
 #include "renderer/Shader.hpp"
